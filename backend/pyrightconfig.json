@@ -1,0 +1,13 @@
+{
+  "venvPath": "..",
+  "venv": ".venv",
+  "include": ["app", "tests"],
+  "extraPaths": ["."],
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": ["."]
+    }
+  ],
+  "reportMissingTypeStubs": "none"
+}
