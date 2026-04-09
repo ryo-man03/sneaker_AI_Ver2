@@ -1,0 +1,240 @@
+SOLE//MATRIX フェーズ4 総合実施レポート
+作成日: 2026-04-08
+対象ワークスペース: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+
+==================================================
+1) 実施概要
+==================================================
+- 目的:
+  フェーズ4（User Asset Features）を成立させ、今回実施した全変更・構造・検証結果を統合レポートとして保存する。
+- 今回の到達点:
+  - Gate-2: PASSED（再実測）
+  - Gate-3: PASSED（再実測）
+  - Gate-4: PASSED（実装+実測）
+  - Gate-5以降: 未着手（NOT PASSED）
+
+==================================================
+2) フェーズ4で実施したこと
+==================================================
+[Backend]
+- User Asset API を追加
+  - wishlist API: GET/POST/DELETE
+  - closet API: GET/POST/PATCH/DELETE
+  - portfolio API: GET
+  - price-alerts API: GET/POST/PATCH/DELETE
+- モデル追加
+  - WishlistItem
+  - ClosetItem
+  - PriceAlertRule
+- スキーマ追加
+  - user_assets.py
+- migration 追加
+  - 20260408_0002_user_assets.py
+- 既存 migration と startup create_all の共存に対応するため、migration を冪等化
+- 統合テスト追加
+  - test_user_assets.py
+
+[Frontend]
+- 本実装ページ追加
+  - WishlistPage
+  - ClosetPage
+  - PortfolioPage
+- API クライアント/型追加
+  - src/services/api.ts
+  - src/types/assets.ts
+- 詳細画面から wishlist/closet 追加導線を接続
+- Gate-4 用 e2e 追加
+  - phase4-gate4.spec.ts
+
+==================================================
+3) その他今回行ったこと
+==================================================
+- 既存検証を再実測して Gate-2/3 を再確定
+  - frontend lint/typecheck/test/build/e2e 再実行
+  - backend ruff/mypy/pytest/alembic 再実行
+- API 到達性の実測を実施
+  - /health, /api/v1/health, /docs
+  - /api/v1/sneakers, /api/v1/search, /api/v1/market, /api/v1/stocks
+  - /api/v1/wishlist, /api/v1/closet, /api/v1/portfolio, /api/v1/price-alerts
+- VS Code Problems を確認
+  - No errors found
+
+==================================================
+4) 変更ファイル一覧（git status --short 実測）
+==================================================
+[Modified]
+- backend/.env.example
+- backend/app/api/router.py
+- backend/app/core/settings.py
+- backend/app/main.py
+- backend/pyproject.toml
+- backend/requirements.txt
+- frontend/eslint.config.js
+- frontend/package-lock.json
+- frontend/package.json
+- frontend/src/App.tsx
+- frontend/src/components/Topbar.tsx
+- frontend/src/main.tsx
+- frontend/src/pages/DashboardPage.tsx
+- frontend/src/pages/DetailPage.tsx
+- frontend/src/pages/LoginPage.tsx
+- frontend/src/pages/SearchPage.tsx
+- frontend/src/theme.css
+- frontend/tsconfig.app.json
+
+[Untracked]
+- backend/alembic.ini
+- backend/alembic/
+- backend/app/api/routers/alerts.py
+- backend/app/api/routers/closet.py
+- backend/app/api/routers/market.py
+- backend/app/api/routers/portfolio.py
+- backend/app/api/routers/search.py
+- backend/app/api/routers/sneakers.py
+- backend/app/api/routers/stocks.py
+- backend/app/api/routers/wishlist.py
+- backend/app/db/
+- backend/app/models/
+- backend/app/schemas/core_data.py
+- backend/app/schemas/user_assets.py
+- backend/sole_matrix.db
+- backend/tests/test_core_data.py
+- backend/tests/test_user_assets.py
+- frontend/playwright.config.ts
+- frontend/src/components/CultureRadarChart.tsx
+- frontend/src/data/sneakers.ts
+- frontend/src/pages/ClosetPage.tsx
+- frontend/src/pages/MarketPage.tsx
+- frontend/src/pages/PortfolioPage.tsx
+- frontend/src/pages/StocksPage.tsx
+- frontend/src/pages/WishlistPage.tsx
+- frontend/src/services/
+- frontend/src/types/assets.ts
+- frontend/test-results/
+- frontend/tests/
+
+==================================================
+5) ファイル構造スナップショット（主要）
+==================================================
+[ROOT]
+- .vscode/
+- backend/
+- frontend/
+- .gitignore
+
+[backend/app]
+- api/
+- core/
+- db/
+- models/
+- schemas/
+- main.py
+
+[backend/app/api/routers]
+- auth.py
+- health.py
+- sneakers.py
+- search.py
+- market.py
+- stocks.py
+- wishlist.py
+- closet.py
+- portfolio.py
+- alerts.py
+
+[backend/app/models]
+- sneaker.py
+- market.py
+- stock.py
+- wishlist.py
+- closet.py
+- price_alert.py
+
+[backend/app/schemas]
+- auth.py
+- health.py
+- core_data.py
+- user_assets.py
+
+[backend/tests]
+- test_health.py
+- test_auth.py
+- test_core_data.py
+- test_user_assets.py
+
+[frontend/src/pages]
+- LoginPage.tsx
+- DashboardPage.tsx
+- SearchPage.tsx
+- DetailPage.tsx
+- MarketPage.tsx
+- StocksPage.tsx
+- WishlistPage.tsx
+- ClosetPage.tsx
+- PortfolioPage.tsx
+- PlaceholderPage.tsx
+
+[frontend/src/components]
+- Sidebar.tsx
+- Topbar.tsx
+- CultureRadarChart.tsx
+
+[frontend/tests/e2e]
+- phase2-gate2.spec.ts
+- phase4-gate4.spec.ts
+
+==================================================
+6) テスト・検証実行結果（実測）
+==================================================
+[frontend]
+- npm run lint: PASS
+- npm run typecheck: PASS
+- npm run test: PASS（No test files found, exit code 0）
+- npm run build: PASS
+- npm run e2e: PASS（4 passed）
+
+[backend]
+- python -m ruff check .: PASS
+- python -m mypy .: PASS
+- python -m pytest -q: PASS（9 passed）
+- python -m alembic upgrade head: PASS
+
+[API疎通]
+- GET /health: 200
+- GET /api/v1/health: 200
+- GET /api/v1/sneakers: 200
+- GET /api/v1/search?q=jordan: 200
+- GET /api/v1/market?period=1d: 200
+- GET /api/v1/stocks?period=1d: 200
+- GET /api/v1/wishlist: 200
+- GET /api/v1/closet: 200
+- GET /api/v1/portfolio: 200
+- GET /api/v1/price-alerts: 200
+- GET /docs: 200
+
+[Problems]
+- No errors found
+
+==================================================
+7) Gate判定
+==================================================
+- Gate-2: PASSED
+- Gate-3: PASSED
+- Gate-4: PASSED
+- Gate-5: NOT PASSED
+- Gate-6: NOT PASSED
+- Gate-7: NOT PASSED
+- Gate-8: NOT PASSED
+
+==================================================
+8) 未解決リスク
+==================================================
+- FastAPI on_event の非推奨警告が残存（機能影響なし）
+- DB ファイル（backend/sole_matrix.db）は作業状態依存のため、運用ポリシーに応じて追跡方針の整理が必要
+
+==================================================
+9) 次アクション
+==================================================
+1) Phase 5（AI / Intelligence）を開始
+2) BuyScore/CultureVector/image-intake/correlation/fallback を最小可動で実装
+3) Gate-5 判定を実測で確定

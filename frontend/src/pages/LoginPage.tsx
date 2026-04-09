@@ -51,6 +51,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     } catch {
       // Scaffold段階ではAPI停止時もUI導線確認を継続できるようにする。
       if (normalizedEmail.includes('@') && normalizedPassword.length >= 1) {
+        localStorage.setItem('sm_access_token', 'local-fallback-token')
+        localStorage.setItem('sm_user_name', normalizedEmail)
         onLogin()
         return
       }

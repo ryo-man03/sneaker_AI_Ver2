@@ -1,0 +1,283 @@
+[PHASE RESUME SNAPSHOT]
+- current_workspace: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- current_gate_status: Gate-0 PASS / Gate-1 PASS / Gate-2 PASSED / Gate-3 PASSED / Gate-4 PASSED / Gate-5 PASSED / Gate-6 NOT PASSED / Gate-7 NOT PASSED / Gate-8 NOT PASSED
+- confirmed_passes: frontend lint/typecheck/build/e2e PASS, backend ruff/mypy/pytest PASS, core-data API PASS, user-asset API PASS
+- unresolved_gaps: Gate-6 (Scheduler/Alerts Delivery), Gate-7 (Reliability/AdminOps), Gate-8 (Final hardening) 未着手
+- current_phase: Phase 5 完了
+- target_gate: Gate-5
+- next_action: Phase 6 実装開始（scheduler/notification dedupe）
+
+[STEP REPORT]
+- step: Phase 2 closure through Phase 4 execution
+- goal: Gate-2 を再実測で閉じ、Gate-3/4 を順番に成立させる
+- files_created:
+  - backend/alembic/versions/20260408_0002_user_assets.py
+  - backend/app/api/routers/alerts.py
+  - backend/app/api/routers/closet.py
+  - backend/app/api/routers/portfolio.py
+  - backend/app/api/routers/wishlist.py
+  - backend/app/models/closet.py
+  - backend/app/models/price_alert.py
+  - backend/app/models/wishlist.py
+  - backend/app/schemas/user_assets.py
+  - backend/tests/test_user_assets.py
+  - frontend/src/pages/ClosetPage.tsx
+  - frontend/src/pages/WishlistPage.tsx
+  - frontend/src/pages/PortfolioPage.tsx
+  - frontend/src/services/api.ts
+  - frontend/src/types/assets.ts
+  - frontend/tests/e2e/phase4-gate4.spec.ts
+- files_changed:
+  - backend/app/api/router.py
+  - backend/app/db/session.py
+  - backend/app/models/__init__.py
+  - backend/alembic/env.py
+  - frontend/src/App.tsx
+  - frontend/src/pages/DetailPage.tsx
+  - frontend/src/theme.css
+  - frontend/tests/e2e/phase2-gate2.spec.ts
+- secrets_handling_status:
+  - backend/.env 実値は未出力
+  - report/log/source へ secret 実値の露出なし
+  - .env.example はプレースホルダーのみ
+- latest_info_checked:
+  - @playwright/test: 1.59.1
+  - SQLAlchemy: 2.0.49
+  - Alembic: 1.17.1
+  - aiosqlite: 0.21.0
+- problems_status:
+  - PASS（No errors found）
+- lint:
+  - PASS（frontend: npm run lint / backend: ruff check）
+- typecheck:
+  - PASS（frontend: npm run typecheck / backend: mypy）
+- unit_test:
+  - PASS（frontend: no unit files, exit 0 / backend: pytest 9 passed）
+- integration_test:
+  - PASS（backend/tests/test_core_data.py + test_user_assets.py）
+- e2e_test:
+  - PASS（frontend: npm run e2e 4 passed）
+- browser_verification:
+  - login→dashboard: OK（e2e TEST）
+  - sidebar navigation: OK（e2e TEST）
+  - search→detail: OK（e2e TEST）
+  - refresh restore: OK（e2e TEST）
+  - market page: OK（e2e + URL open）
+  - stocks page: OK（e2e + URL open）
+  - notifications page: OK（URL open）
+  - profile page: OK（URL open）
+  - buyscore page: OK（URL open）
+  - admin page: OK（URL open）
+  - dataops page: OK（URL open）
+- api_verification:
+  - GET /health: OK (200)
+  - GET /api/v1/health: OK (200)
+  - sneakers API: OK (200)
+  - market API: OK (200)
+  - stocks API: OK (200)
+  - search API: OK (200)
+  - wishlist API: OK (200)
+  - closet API: OK (200)
+  - portfolio API: OK (200)
+  - price-alerts API: OK (200)
+- gate_status:
+  - Gate-2: PASSED
+  - Gate-3: PASSED
+  - Gate-4: PASSED
+  - Gate-5: NOT PASSED
+  - Gate-6: NOT PASSED
+  - Gate-7: NOT PASSED
+  - Gate-8: NOT PASSED
+- unresolved_risks:
+  - FastAPI on_event 非推奨警告が残存（機能影響なし）
+  - open_browser_page は到達確認のみで DOM/console 詳細検査は不可
+- next_action:
+  - Phase 5（AI/Intelligence）へ進行
+
+[PHASE COMPLETION SUMMARY]
+- phase: Phase 2 closure through Phase 4
+- completed_objectives:
+  - Gate-2 必須導線を e2e で再実測し閉鎖
+  - Gate-3 Core Data（DB/API/migration/integration）を再実測で維持
+  - Gate-4 wishlist/closet/portfolio/price-alert CRUD と UI 接続を成立
+- created_modules:
+  - app.api.routers.(wishlist|closet|portfolio|alerts)
+  - app.models.(wishlist|closet|price_alert)
+  - app.schemas.user_assets
+- created_pages:
+  - WishlistPage
+  - ClosetPage
+  - PortfolioPage
+- created_apis:
+  - GET/POST/DELETE /api/v1/wishlist
+  - GET/POST/PATCH/DELETE /api/v1/closet
+  - GET /api/v1/portfolio
+  - GET/POST/PATCH/DELETE /api/v1/price-alerts
+- created_tests:
+  - backend/tests/test_user_assets.py
+  - frontend/tests/e2e/phase4-gate4.spec.ts
+- latest_info_recheck:
+  - Playwright/SQLAlchemy/Alembic/aiosqlite バージョン確認済み
+- problems_check:
+  - PASS
+- lint_check:
+  - PASS
+- typecheck_check:
+  - PASS
+- test_check:
+  - PASS
+- browser_check:
+  - PASS（e2e + URL open）
+- fallback_check:
+  - API失敗時 UI エラーメッセージ表示を維持
+- dqm_check:
+  - 未確認（Phase 7 対象）
+- scheduler_check:
+  - 未確認（Phase 6 対象）
+- gate_result:
+  - Gate-2: PASSED
+  - Gate-3: PASSED
+  - Gate-4: PASSED
+  - Gate-5: NOT PASSED
+  - Gate-6: NOT PASSED
+  - Gate-7: NOT PASSED
+  - Gate-8: NOT PASSED
+- unresolved_items:
+  - Phase 5〜8 実装未着手
+- ready_for_next_phase:
+  - yes
+
+[FILE STRUCTURE SNAPSHOT]
+- frontend/
+  - src/
+    - pages/(WishlistPage.tsx, ClosetPage.tsx, PortfolioPage.tsx)
+    - services/api.ts
+    - types/assets.ts
+  - tests/e2e/(phase2-gate2.spec.ts, phase4-gate4.spec.ts)
+- backend/
+  - app/api/routers/(wishlist.py, closet.py, portfolio.py, alerts.py)
+  - app/models/(wishlist.py, closet.py, price_alert.py)
+  - app/schemas/user_assets.py
+  - alembic/versions/20260408_0002_user_assets.py
+  - tests/test_user_assets.py
+- レポート/
+  - phase3_to_phase8_continuation_report_2026-04-08.txt
+
+[TEST EXECUTION LOG SUMMARY]
+- frontend lint:
+  - PASS
+- frontend typecheck:
+  - PASS
+- frontend build:
+  - PASS
+- frontend e2e:
+  - PASS（4 passed）
+- backend ruff:
+  - PASS
+- backend mypy:
+  - PASS
+- backend pytest:
+  - PASS（9 passed）
+- migration:
+  - PASS（alembic upgrade head）
+- health endpoint:
+  - PASS（/health=200, /api/v1/health=200, /docs=200）
+- browser verification:
+  - PASS（e2e導線 + URL open）
+
+[STEP REPORT]
+- step: Phase 5 AI/Intelligence implementation and verification
+- goal: Gate-5 を成立させる（BuyScore/CultureVector/intake/correlation/fallback）
+- files_created:
+  - backend/app/schemas/intelligence.py
+  - backend/app/services/intelligence.py
+  - backend/app/api/routers/intelligence.py
+  - backend/tests/test_intelligence.py
+  - frontend/src/types/intelligence.ts
+  - frontend/src/pages/BuyScorePage.tsx
+  - frontend/src/pages/DataOpsPage.tsx
+  - frontend/tests/e2e/phase5-gate5.spec.ts
+- files_changed:
+  - backend/app/api/router.py
+  - backend/app/core/settings.py
+  - backend/.env.example
+  - frontend/src/App.tsx
+- secrets_handling_status:
+  - backend/.env 実値は未出力
+  - report/log/source への secret 実値露出なし
+  - .env.example はプレースホルダー運用
+- problems_status:
+  - PASS（No errors found）
+- lint:
+  - PASS（frontend: npm run lint / backend: ruff check）
+- typecheck:
+  - PASS（frontend: npm run typecheck / backend: mypy）
+- unit_test:
+  - PASS（frontend: npm run test / backend: pytest）
+- integration_test:
+  - PASS（backend/tests/test_intelligence.py + 既存統合テスト）
+- e2e_test:
+  - PASS（frontend: npm run e2e 5 passed）
+- browser_verification:
+  - /buyscore: OK（URL open + e2e）
+  - /dataops: OK（URL open + e2e）
+- api_verification:
+  - GET /health: OK (200)
+  - GET /api/v1/intelligence/buyscore/555088-001: OK (200)
+  - GET /api/v1/intelligence/culture-vector/555088-001: OK (200)
+  - GET /api/v1/intelligence/correlation?period=1d: OK (200)
+  - POST /api/v1/intelligence/intake: OK (200)
+- gate_status:
+  - Gate-5: PASSED
+  - Gate-6: NOT PASSED
+  - Gate-7: NOT PASSED
+  - Gate-8: NOT PASSED
+- unresolved_risks:
+  - FastAPI on_event 非推奨警告が残存（機能影響なし）
+- next_action:
+  - Phase 6（Scheduler/Alerts Delivery）へ進行
+
+[PHASE COMPLETION SUMMARY]
+- phase: Phase 5 AI/Intelligence
+- completed_objectives:
+  - BuyScore 最小計算器を API 経由で提供
+  - CultureVector 15次元の typed shape を提供
+  - intake pipeline（image/url/csv）を実装
+  - stock correlation analysis API を提供
+  - AI unavailable fallback（meta.partial / fallback_reason）を実装
+- created_modules:
+  - app.schemas.intelligence
+  - app.services.intelligence
+  - app.api.routers.intelligence
+- created_pages:
+  - BuyScorePage
+  - DataOpsPage
+- created_apis:
+  - GET /api/v1/intelligence/buyscore/{sku}
+  - GET /api/v1/intelligence/culture-vector/{sku}
+  - GET /api/v1/intelligence/correlation
+  - POST /api/v1/intelligence/intake
+- created_tests:
+  - backend/tests/test_intelligence.py
+  - frontend/tests/e2e/phase5-gate5.spec.ts
+- problems_check:
+  - PASS
+- lint_check:
+  - PASS
+- typecheck_check:
+  - PASS
+- test_check:
+  - PASS（backend pytest 12 passed / frontend e2e 5 passed）
+- browser_check:
+  - PASS（/buyscore, /dataops 到達確認 + e2e）
+- fallback_check:
+  - PASS（AI unavailable 時に partial/fallback_reason を返却）
+- gate_result:
+  - Gate-5: PASSED
+  - Gate-6: NOT PASSED
+  - Gate-7: NOT PASSED
+  - Gate-8: NOT PASSED
+- unresolved_items:
+  - Phase 6〜8 未実装
+- ready_for_next_phase:
+  - yes

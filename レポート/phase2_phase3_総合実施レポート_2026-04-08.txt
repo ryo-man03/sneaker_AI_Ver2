@@ -1,0 +1,157 @@
+[SOLE_MATRIX 総合実施レポート]
+- 作成日: 2026-04-08
+- 対象ワークスペース: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- レポート種別: フェーズ進行・実施内容・構造・テスト実行結果の総合版
+
+[フェーズ進捗サマリー]
+- Gate-0: PASSED
+- Gate-1: PASSED
+- Gate-2: PASSED
+- Gate-3: PASSED
+- 現在地: Phase 2 閉鎖 + Phase 3 Core Data 最小可動成立
+
+[今回行ったこと（実施項目）]
+1) Phase 2 閉鎖
+- login→dashboard 導線の実測確認
+- sidebar navigation の実測確認
+- search→detail クリック導線の実測確認
+- refresh restore の実測確認
+- Playwright e2e 実行（3シナリオ）
+- browser console/pageerror/requestfailed の最小監視を導入（遷移中 ERR_ABORTED は除外）
+
+2) フロント品質検証
+- npm run lint: PASS
+- npm run typecheck: PASS
+- npm run test: PASS（No test files found, exit code 0）
+- npm run build: PASS
+- npm run e2e: PASS（3 passed）
+
+3) バックエンド品質・機能検証
+- python -m ruff check: PASS
+- python -m mypy: PASS
+- python -m pytest -q: PASS（7 passed）
+- python -m alembic upgrade head: PASS
+- API到達確認: /health, /api/v1/health, /docs すべて 200
+
+4) Core Data（Phase 3）
+- sneakers/search/market/stocks API の成立確認
+- response shape（source, updated_at, partial, ai_available）の確認
+- DB基盤（SQLAlchemy async + SQLite WAL + busy_timeout）と migration 基盤（Alembic）を実運用確認
+
+[変更内容（git status --short ベース）]
+- Modified:
+  - backend/.env.example
+  - backend/app/api/router.py
+  - backend/app/core/settings.py
+  - backend/app/main.py
+  - backend/pyproject.toml
+  - backend/requirements.txt
+  - frontend/eslint.config.js
+  - frontend/package-lock.json
+  - frontend/package.json
+  - frontend/src/App.tsx
+  - frontend/src/components/Topbar.tsx
+  - frontend/src/main.tsx
+  - frontend/src/pages/DashboardPage.tsx
+  - frontend/src/pages/DetailPage.tsx
+  - frontend/src/pages/LoginPage.tsx
+  - frontend/src/pages/SearchPage.tsx
+  - frontend/src/theme.css
+  - frontend/tsconfig.app.json
+- Untracked:
+  - backend/alembic.ini
+  - backend/alembic/
+  - backend/app/api/routers/market.py
+  - backend/app/api/routers/search.py
+  - backend/app/api/routers/sneakers.py
+  - backend/app/api/routers/stocks.py
+  - backend/app/db/
+  - backend/app/models/
+  - backend/app/schemas/core_data.py
+  - backend/sole_matrix.db
+  - backend/sole_matrix.db-shm
+  - backend/sole_matrix.db-wal
+  - backend/tests/test_core_data.py
+  - frontend/playwright.config.ts
+  - frontend/src/components/CultureRadarChart.tsx
+  - frontend/src/data/sneakers.ts
+  - frontend/src/pages/MarketPage.tsx
+  - frontend/src/pages/StocksPage.tsx
+  - frontend/test-results/
+  - frontend/tests/
+
+[ファイル構造スナップショット]
+- frontend/
+  - package.json
+  - playwright.config.ts
+  - src/
+    - App.tsx
+    - main.tsx
+    - theme.css
+    - components/
+      - Topbar.tsx
+      - CultureRadarChart.tsx
+    - data/
+      - sneakers.ts
+    - pages/
+      - LoginPage.tsx
+      - DashboardPage.tsx
+      - SearchPage.tsx
+      - DetailPage.tsx
+      - MarketPage.tsx
+      - StocksPage.tsx
+  - tests/
+    - e2e/
+      - phase2-gate2.spec.ts
+- backend/
+  - alembic.ini
+  - alembic/
+    - env.py
+    - versions/
+  - app/
+    - main.py
+    - core/
+      - settings.py
+    - api/
+      - router.py
+      - routers/
+        - sneakers.py
+        - search.py
+        - market.py
+        - stocks.py
+    - db/
+    - models/
+    - schemas/
+      - core_data.py
+  - tests/
+    - test_core_data.py
+
+[テスト実行結果サマリー]
+- frontend lint: PASS
+- frontend typecheck: PASS
+- frontend unit test: PASS（No test files found）
+- frontend build: PASS
+- frontend e2e: PASS（3 passed）
+- backend ruff: PASS
+- backend mypy: PASS
+- backend pytest: PASS（7 passed）
+- backend integration test（core data）: PASS（4 passed）
+- migration: PASS（alembic upgrade head）
+- health endpoint: PASS（/health=200, /api/v1/health=200, /docs=200）
+
+[追加依存の確認結果]
+- @playwright/test: 1.59.1
+- SQLAlchemy: 2.0.49
+- Alembic: 1.17.1
+- aiosqlite: 0.21.0
+
+[判定]
+- Gate-2: PASSED
+- Gate-3: PASSED
+
+[未解決リスク]
+- FastAPI on_event の非推奨警告が残存（機能影響なし、将来 lifespan へ移行推奨）
+- 手動目視確認は最小で、主要導線の証跡は e2e 中心
+
+[次に進むべきフェーズ]
+- Phase 4（wishlist / closet / portfolio）

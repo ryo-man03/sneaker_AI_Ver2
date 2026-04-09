@@ -1,0 +1,97 @@
+[PHASE RESUME SNAPSHOT]
+- current_workspace: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- current_gate_status: Gate-0 PASS / Gate-1 PASS / Gate-2 PASS / Gate-3 PASS / Gate-4 PASS / Gate-5 PASS / Gate-6 PASS / Gate-7 NOT PASSED / Gate-8 NOT PASSED
+- confirmed_passes: Phase6 までの既存ゲートは維持
+- unresolved_gaps: Instagram trend intake / Gemini image analysis / Gemini grounding search の未統合
+- target_feature: Post-Phase6 integration
+- next_action: backend連携実装 -> frontend導線実装 -> 検証
+
+[STEP REPORT]
+- step: Backend integration implementation
+- goal: Instagram/Gemini/Grounding の最小APIを安全に追加
+- files_created:
+  - backend/app/integrations/gemini_client.py
+  - backend/app/integrations/instagram_client.py
+  - backend/app/services/image_analysis.py
+  - backend/app/services/search_grounding.py
+  - backend/app/services/social_trends.py
+  - backend/app/api/routers/image_analysis.py
+  - backend/app/api/routers/search_grounding.py
+  - backend/app/api/routers/instagram.py
+  - backend/app/schemas/image_analysis.py
+  - backend/app/schemas/search_grounding.py
+  - backend/app/schemas/instagram.py
+  - backend/tests/test_image_analysis_integration.py
+  - backend/tests/test_search_grounding_integration.py
+  - backend/tests/test_instagram_trends_integration.py
+  - backend/tests/test_settings_env_loading.py
+- files_changed:
+  - backend/app/core/settings.py
+  - backend/.env.example
+  - backend/app/api/router.py
+- lint: PASS (python -m ruff check .)
+- typecheck: PASS (python -m mypy .)
+- unit_test: PASS (python -m pytest -q)
+- integration_test: PASS (new contract tests included)
+- browser_verification: pending
+- api_verification: pending
+- unresolved_risks: 外部API到達可否に依存するため fallback 経路を既定化
+- next_action: frontend導線追加
+
+[STEP REPORT]
+- step: Frontend minimum UI wiring
+- goal: Search/Detail/DataOps に新規連携表示を追加
+- files_changed:
+  - frontend/src/pages/SearchPage.tsx
+  - frontend/src/pages/DetailPage.tsx
+  - frontend/src/pages/DataOpsPage.tsx
+- files_created:
+  - frontend/tests/e2e/phase6-plus-instagram-gemini.spec.ts
+- lint: PASS (npm run lint)
+- typecheck: PASS (npm run typecheck)
+- unit_test: PASS (npm run test)
+- integration_test: N/A
+- browser_verification: PASS (playwright new spec + full e2e 7 passed)
+- api_verification: pending
+- unresolved_risks: Gemini/Instagramは失敗時 fallback source を返却
+- next_action: API connectivity を実測
+
+[STEP REPORT]
+- step: Runtime/API verification
+- goal: health + new endpoints を実測
+- files_created: none
+- files_changed: none
+- lint: PASS
+- typecheck: PASS
+- unit_test: PASS
+- integration_test: PASS
+- browser_verification: PASS
+- api_verification:
+  - GET /health => 200
+  - GET /api/v1/health => 200
+  - GET /docs => 200
+  - POST /api/v1/image-analysis/analyze => 200
+  - POST /api/v1/search-grounding/answer => 200
+  - GET /api/v1/instagram/trends => 200
+- unresolved_risks:
+  - 外部サービス失敗時は partial=true + error_message で継続
+  - on_event deprecation warning は継続
+- next_action: Phase 7 Reliability/AdminOps へ進行
+
+[SECURITY NOTES]
+- secrets は backend/.env からのみ読込
+- secrets 実値のログ/レポート出力は未実施
+- .env.example にはキー名のみ保持
+
+[IMPLEMENTATION SUMMARY]
+- Instagram API: hashtag trend intake endpoint 追加 (/api/v1/instagram/trends)
+- Gemini image analysis: structured extraction endpoint 追加 (/api/v1/image-analysis/analyze)
+- Gemini grounded answer: search-answer endpoint 追加 (/api/v1/search-grounding/answer)
+- 全レスポンスで data/source/updated_at/ai_available/partial/error_message(必要時) を返却
+- frontend で loading/error/empty/partial 表示を追加
+
+[VERIFICATION SUMMARY]
+- backend: ruff PASS / mypy PASS / pytest PASS (17 passed)
+- frontend: lint PASS / typecheck PASS / test PASS / build PASS
+- e2e: full suite PASS (7 passed)
+- Problems: No errors found

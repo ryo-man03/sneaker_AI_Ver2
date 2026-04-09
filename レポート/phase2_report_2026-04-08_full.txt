@@ -1,0 +1,111 @@
+﻿SOLE//MATRIX Phase 2 総合レポート（更新版）
+作成日: 2026-04-08
+対象: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+
+[1. 実施サマリー]
+- Phase 2 判定に必要な最小検証を実行
+- frontend/backend の静的検証と起動検証を実施
+- API疎通を実測
+- ブラウザ到達性（URLアクセス）を実測
+- 直近ターミナル履歴の失敗（誤cwdでの npm run dev、git PATH未解決）と復旧内容を記録
+- レポートをレポートフォルダへ保存
+
+[2. 固定TODOの対応状況]
+- TODO-1 プレースホルダー残存の解消: 部分対応（Search/Detail/Dashboard を改修、他ページは Phase 2 対象外として残存）
+- TODO-2 Search/Detail 機能密度: 対応済み（検索結果表示、詳細遷移、主要情報表示）
+- TODO-3 Gate-2 検証と正式レポート保存: 対応済み（ただし Gate-2 判定は NOT PASSED）
+
+[3. Gate-2 判定結果]
+判定: NOT PASSED
+理由:
+- lint/typecheck は PASS
+- login/dashboard/sidebar/topbar/search/detail の「手動操作導線」確認が未確認
+- 自動e2e未実施
+
+[4. 実行結果（実測）]
+4-1 Frontend
+- npm run lint: PASS
+- npm run typecheck: PASS
+- npm run test: PASS（No test files found, exit code 0）
+- npm run build: PASS
+- npm run dev -- --host 127.0.0.1 --port 5173: PASS（正しいcwdで再実行後）
+
+4-2 Backend
+- python -m uvicorn app.main:app --app-dir . --host 127.0.0.1 --port 8000: PASS
+- GET /health: PASS（200）
+- GET /api/v1/health: PASS（200）
+- GET /docs: PASS（200）
+- python -m ruff check .: PASS
+- python -m mypy .: PASS
+- python -m pytest -q: PASS
+
+4-3 Browser/到達性
+- GET http://127.0.0.1:5173/: PASS（200）
+- GET http://127.0.0.1:5173/login: PASS（200）
+- GET http://127.0.0.1:5173/search: PASS（200）
+- GET http://127.0.0.1:5173/detail: PASS（200）
+- open_browser_page で /, /login, /search, /detail オープン: 成功
+- 手動クリック導線（login→dashboard, sidebar遷移, refresh復元）: 未確認
+- Console赤エラー有無: 未確認
+
+4-4 Problems / Git
+- VS Code Problems: PASS（get_errors: No errors found）
+- Git unresolved conflict: PASS（git diff --name-only --diff-filter=U の出力なし）
+
+[5. 直近失敗と対処]
+- 失敗1: npm run dev を c:\Users\liang\スニーカーさん で実行し ENOENT（package.jsonなし）
+  - 対処: frontend へ Push-Location して同一コマンド再実行
+  - 結果: PASS
+- 失敗2: git コマンドが PATH 未解決
+  - 対処: C:\Program Files\Git\cmd\git.exe を明示して再実行
+  - 結果: PASS
+- 失敗3: 別履歴に uvicorn 起動失敗あり
+  - 対処: --app-dir . を付与して backend 配下から起動
+  - 結果: PASS
+
+[6. 今回の変更ファイル（実測ベース）]
+- backend/.env.example
+- backend/app/core/settings.py
+- backend/app/main.py
+- frontend/package-lock.json
+- frontend/package.json
+- frontend/src/App.tsx
+- frontend/src/components/Topbar.tsx
+- frontend/src/main.tsx
+- frontend/src/pages/DashboardPage.tsx
+- frontend/src/pages/DetailPage.tsx
+- frontend/src/pages/SearchPage.tsx
+- frontend/src/theme.css
+- frontend/tsconfig.app.json
+- frontend/src/components/CultureRadarChart.tsx（新規）
+- frontend/src/data/sneakers.ts（新規）
+
+[7. ファイル構造スナップショット]
+- frontend/
+  - src/
+    - App.tsx
+    - main.tsx
+    - components/
+    - pages/
+    - data/
+  - package.json
+  - tsconfig.app.json
+- backend/
+  - app/
+    - main.py
+    - api/
+    - core/
+    - schemas/
+  - tests/
+  - pyproject.toml
+- レポート/
+  - phase2_report_2026-04-08.txt
+  - phase2_report_2026-04-08_full.txt
+
+[8. 最終ステータス]
+- Phase 2: 継続中
+- Gate-2: NOT PASSED
+- 次アクション:
+  1) 手動ブラウザ導線確認（login→dashboard, sidebar遷移, search→detailクリック遷移, refresh復元）
+  2) 可能なら Playwright で最小e2eを1本追加して再判定
+  3) Gate-2 再判定（全必須項目PASSで PASSED）

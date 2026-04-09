@@ -1,0 +1,287 @@
+SOLE//MATRIX 再構築レポート (フェーズ1)
+作成日: 2026-04-08
+作成場所: c:\Users\liang\スニーカーさん\レポート\SOLE_MATRIX_フェーズ1報告_20260408.txt
+対象ワークスペース: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+本レポート対象フェーズ: フェーズ1 (Workspace Scaffold)
+関連GitHubリポジトリ: https://github.com/ryo-man03/sneaker_AI_Ver2.git
+
+==================================================
+1) 実施概要
+==================================================
+- 目的:
+  提供HTMLをベースに、既存実装を再利用せず新規ワークスペースで再構築を進める。
+- 今回の到達点:
+  フェーズ1の完了報告として、Phase 0 (Research/Planning) と Phase 1 (Workspace Scaffold) の実施結果を記録。
+- 追加対応:
+  ログインできない不具合を修正し、UI導線を継続可能な状態にした。
+
+==================================================
+2) フェーズ進捗
+==================================================
+[Phase 0: Research / Planning]
+- 完了。
+- 実施内容:
+  - 最新依存バージョンを確認
+  - WORKSPACE REBUILD SNAPSHOT 作成
+  - 新規ワークスペース方針確定
+  - 旧コード再利用なしを確定
+
+[Phase 1: Workspace Scaffold]
+- 完了。
+- 実施内容:
+  - 新規ディレクトリ作成
+  - frontend (Vite + React + TS) 初期化
+  - backend (FastAPI) 最小構成作成
+  - health/auth API実装
+  - テスト実装 (health, auth success/failure)
+  - .env / .env.example / .gitignore 追加
+  - Problems 0 を確認
+
+[Phase 2以降]
+- 未着手 (次ステップ)
+
+==================================================
+3) 最新情報確認結果 (Phase 0)
+==================================================
+- react: 19.2.4
+- vite: 8.0.7
+- @playwright/test: 1.59.1
+- fastapi: 0.135.3
+- sqlalchemy: 2.0.49
+- APScheduler: 3.11.2
+- pydantic: 2.12.5
+
+==================================================
+4) 今回行ったこと (時系列サマリー)
+==================================================
+1. 新規ワークスペース作成
+   - c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+2. frontend 初期化
+   - npm create vite@latest frontend -- --template react-ts
+3. frontend 実装
+   - ログイン画面
+   - Sidebar / Topbar
+   - Dashboard / Search / Detail
+   - 他ページのプレースホルダー化 (Phase 1 用)
+4. backend 実装
+   - FastAPI アプリ
+   - /api/v1/health
+   - /api/v1/auth/login
+   - settings と schemas
+5. backend テスト追加
+   - tests/test_health.py
+   - tests/test_auth.py
+6. 認証不具合対応
+   - frontend ログイン処理をAPI呼び出し型に改善
+   - 過度なバリデーションを緩和
+   - 送信中状態管理を追加
+7. 検証実行
+   - frontend lint/build
+   - backend ruff/mypy/pytest
+   - API疎通 (health/login)
+   - Problems確認
+8. Todo 完了更新
+9. GitHub連携
+  - ローカル Git 初期化
+  - origin 設定: https://github.com/ryo-man03/sneaker_AI_Ver2.git
+  - 初回コミット作成と main への push 完了
+  - local HEAD と origin/main の一致を確認
+
+==================================================
+5) 変更ファイル一覧 (主要)
+==================================================
+[ルート]
+- .gitignore
+- .vscode/settings.json
+
+[backend]
+- backend/.env
+- backend/.env.example
+- backend/pyproject.toml
+- backend/pyrightconfig.json
+- backend/requirements.txt
+- backend/requirements-dev.txt
+- backend/app/__init__.py
+- backend/app/main.py
+- backend/app/api/__init__.py
+- backend/app/api/router.py
+- backend/app/api/routers/__init__.py
+- backend/app/api/routers/auth.py
+- backend/app/api/routers/health.py
+- backend/app/core/__init__.py
+- backend/app/core/settings.py
+- backend/app/schemas/__init__.py
+- backend/app/schemas/auth.py
+- backend/app/schemas/health.py
+- backend/tests/test_auth.py
+- backend/tests/test_health.py
+
+[frontend]
+- frontend/src/App.tsx
+- frontend/src/main.tsx
+- frontend/src/theme.css
+- frontend/src/types/navigation.ts
+- frontend/src/data/nav.ts
+- frontend/src/components/Sidebar.tsx
+- frontend/src/components/Topbar.tsx
+- frontend/src/pages/LoginPage.tsx
+- frontend/src/pages/DashboardPage.tsx
+- frontend/src/pages/SearchPage.tsx
+- frontend/src/pages/DetailPage.tsx
+- frontend/src/pages/PlaceholderPage.tsx
+
+==================================================
+6) ファイル構造 (実体ベース)
+※ node_modules, dist, __pycache__, .pytest_cache, .mypy_cache は除外
+==================================================
+sole_matrix_phase1_new/
+  .gitignore
+  .vscode/
+    settings.json
+  backend/
+    .env
+    .env.example
+    pyproject.toml
+    pyrightconfig.json
+    requirements.txt
+    requirements-dev.txt
+    app/
+      __init__.py
+      main.py
+      api/
+        __init__.py
+        router.py
+        routers/
+          __init__.py
+          auth.py
+          health.py
+      core/
+        __init__.py
+        settings.py
+      schemas/
+        __init__.py
+        auth.py
+        health.py
+    tests/
+      test_auth.py
+      test_health.py
+  frontend/
+    .gitignore
+    eslint.config.js
+    index.html
+    package.json
+    package-lock.json
+    README.md
+    tsconfig.json
+    tsconfig.app.json
+    tsconfig.node.json
+    vite.config.ts
+    public/
+      favicon.svg
+      icons.svg
+    src/
+      App.css
+      App.tsx
+      index.css
+      main.tsx
+      theme.css
+      assets/
+        hero.png
+        react.svg
+        vite.svg
+      components/
+        Sidebar.tsx
+        Topbar.tsx
+      data/
+        nav.ts
+      pages/
+        DashboardPage.tsx
+        DetailPage.tsx
+        LoginPage.tsx
+        PlaceholderPage.tsx
+        SearchPage.tsx
+      types/
+        navigation.ts
+
+==================================================
+7) テスト・検証実行結果
+==================================================
+[frontend]
+- npm run lint: 成功
+- npm run build: 成功
+- ビルド成果物:
+  - dist/index.html
+  - dist/assets/index-Cmy4eHEj.css
+  - dist/assets/index-CrXYjNXz.js
+
+[backend]
+- ruff check app tests: 成功
+- mypy app: 成功
+- pytest: 成功 (3 passed)
+  - test_health_endpoint
+  - test_login_success
+  - test_login_failure
+
+[API疎通]
+- GET http://127.0.0.1:8000/api/v1/health => healthy
+- POST http://127.0.0.1:8000/api/v1/auth/login (正しい資格情報) => token取得成功
+- POST http://127.0.0.1:8000/api/v1/auth/login (誤った資格情報) => 401
+- GET http://127.0.0.1:5173 => 200
+
+[試行回数ログ]
+- 4-6: successCount=2, hasToken=true, failStatus=401
+- 7-11: healthCount=2, loginCount=2, frontend=200
+
+[Problems]
+- ワークスペース Problems: 0
+
+==================================================
+8) 不具合対応記録
+==================================================
+- 事象:
+  「ログインできない」
+- 原因:
+  フロント側バリデーション条件が厳しすぎ、導線で弾かれるケースが発生。
+- 対応:
+  - フォーム送信をAPI連携化
+  - エラー表示改善
+  - 送信中状態管理追加
+  - API未到達時の導線確認用フォールバック追加
+- 結果:
+  ログイン導線が通る状態へ復旧。
+
+==================================================
+9) Gate判定
+==================================================
+- Gate-0: PASS
+- Gate-1: PASS
+  - frontend 起動: OK
+  - backend 起動: OK
+  - health endpoint: OK
+  - router 最小成立: OK
+  - Problems重大エラーゼロ: OK
+  - 試行回数要件: OK
+
+==================================================
+10) 現在状態と次アクション
+==================================================
+- 現在状態:
+  Phase 1完了、todo全完了、GitHub連携済み。
+- 次アクション候補:
+  1) Phase 2 (Core UI) 実装開始
+  2) Playwright e2e導入を先行して主要導線を自動化
+  3) API契約を増やし、Phase 3 (Core Data) へ接続
+
+==================================================
+11) GitHub連携・アップロード確認
+==================================================
+- リポジトリURL:
+  https://github.com/ryo-man03/sneaker_AI_Ver2.git
+- ブランチ:
+  main
+- 最新コミット:
+  7dfeb19 (chore: initialize phase1 scaffold)
+- 同期状態:
+  local HEAD = origin/main (synced: true)
+- 補足:
+  backend/.env は .gitignore により追跡対象外を確認済み。

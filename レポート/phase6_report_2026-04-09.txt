@@ -1,0 +1,134 @@
+[PHASE RESUME SNAPSHOT]
+- current_workspace: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- current_gate_status: Gate-0 PASS / Gate-1 PASS / Gate-2 PASSED / Gate-3 PASSED / Gate-4 PASSED / Gate-5 PASSED / Gate-6 NOT PASSED（開始時点）
+- confirmed_passes: phase3/4/5 backend tests + frontend e2e は再実測でPASS
+- unresolved_gaps: scheduler, periodic jobs, dedupe, cooldown, notification center, alert flow, no duplicate sends
+- target_phase: Phase 6 Alerts / Scheduler
+- next_action: scheduler + notification history + notification center を実装し Gate-6 判定する
+
+[STEP REPORT]
+- step: Phase 3-5 verification and Phase 6 execution
+- goal: フェーズ3〜5の成立を実測確認し、その後 Gate-6 を通過させる
+- files_created:
+  - backend/app/models/notification_event.py
+  - backend/app/schemas/alerts_delivery.py
+  - backend/app/services/alert_scheduler.py
+  - backend/app/api/routers/notifications.py
+  - backend/alembic/versions/20260409_0003_notifications.py
+  - backend/tests/test_alert_scheduler.py
+  - frontend/src/types/notifications.ts
+  - frontend/src/pages/NotificationsPage.tsx
+  - frontend/tests/e2e/phase6-gate6.spec.ts
+- files_changed:
+  - backend/requirements.txt
+  - backend/pyproject.toml
+  - backend/.env.example
+  - backend/app/core/settings.py
+  - backend/app/api/router.py
+  - backend/app/main.py
+  - backend/app/db/session.py
+  - backend/app/models/__init__.py
+  - backend/alembic/env.py
+  - frontend/src/App.tsx
+  - frontend/src/theme.css
+  - frontend/playwright.config.ts
+- latest_info_checked:
+  - @playwright/test: 1.59.1
+  - APScheduler: 3.11.2
+  - SQLAlchemy: 2.0.49
+  - Alembic: 1.17.1
+  - aiosqlite: 0.21.0
+- problems_status:
+  - PASS（get_errors: No errors found）
+- lint:
+  - PASS（frontend: npm run lint / backend: python -m ruff check .）
+- typecheck:
+  - PASS（frontend: npm run typecheck / backend: python -m mypy .）
+- unit_test:
+  - PASS（frontend: npm run test = No test files found, exit 0）
+- integration_test:
+  - PASS（backend: python -m pytest -q = 13 passed）
+- e2e_test:
+  - PASS（frontend: npm run e2e = 6 passed）
+  - PASS（frontend: npm run e2e -- tests/e2e/phase6-gate6.spec.ts = 1 passed）
+- browser_verification:
+  - login→dashboard: OK（phase2 e2e）
+  - sidebar navigation: OK（phase2 e2e）
+  - search→detail: OK（phase2 e2e）
+  - refresh restore: OK（phase2 e2e）
+  - wishlist/closet/portfolio: OK（phase4 e2e）
+  - buyscore/dataops: OK（phase5 e2e）
+  - notifications page: OK（phase6 e2e）
+- api_verification:
+  - GET /health: 200
+  - GET /api/v1/health: 200
+  - GET /docs: 200
+  - GET /api/v1/sneakers: 200
+  - GET /api/v1/search?query=jordan: 200
+  - GET /api/v1/market?period=1d: 200
+  - GET /api/v1/stocks?period=1d: 200
+  - GET /api/v1/intelligence/buyscore/555088-001: 200
+  - GET /api/v1/intelligence/correlation?period=1d: 200
+  - GET /api/v1/notifications/scheduler: 200
+  - POST /api/v1/notifications/run: 200
+  - GET /api/v1/notifications?limit=5: 200
+- gate_status:
+  - Gate-2: PASSED（再実測維持）
+  - Gate-3: PASSED（再実測維持）
+  - Gate-4: PASSED（再実測維持）
+  - Gate-5: PASSED（再実測維持）
+  - Gate-6: PASSED
+- unresolved_risks:
+  - FastAPI on_event の deprecation warning は継続（機能影響なし）
+  - 通知配信チャネルは in_app の最小実装（外部配信は未実装）
+- next_action:
+  - Phase 7 Reliability / AdminOps へ進行
+
+[PHASE COMPLETION SUMMARY]
+- phase: Phase 6 Alerts / Scheduler
+- completed_objectives:
+  - scheduler 起動を app startup に接続
+  - periodic jobs（interval）を APScheduler で実装
+  - dedupe key による重複送信防止を実装
+  - cooldown 判定を実装
+  - notification history 永続化と notification center API を実装
+  - notification center UI を実装
+  - alert flow（rule -> dispatch -> history）を e2e/pytest で実測
+- created_modules:
+  - app.models.notification_event
+  - app.schemas.alerts_delivery
+  - app.services.alert_scheduler
+  - app.api.routers.notifications
+- created_pages:
+  - NotificationsPage
+- created_apis:
+  - GET /api/v1/notifications
+  - POST /api/v1/notifications/run
+  - GET /api/v1/notifications/scheduler
+- created_tests:
+  - backend/tests/test_alert_scheduler.py
+  - frontend/tests/e2e/phase6-gate6.spec.ts
+- latest_info_recheck:
+  - Playwright/APScheduler/SQLAlchemy/Alembic/aiosqlite を再確認済み
+- problems_check:
+  - PASS（No errors found）
+- lint_check:
+  - PASS
+- typecheck_check:
+  - PASS
+- test_check:
+  - PASS（backend 13 passed / frontend e2e 6 passed）
+- browser_check:
+  - PASS（phase2-6 e2e）
+- fallback_check:
+  - PASS（AI unavailable fallback は phase5 実装を維持）
+- dqm_check:
+  - 未実装（Phase 7 対象）
+- scheduler_check:
+  - PASS（running=true / interval_seconds=60）
+- gate_result:
+  - Gate-6: PASSED
+- unresolved_items:
+  - Gate-7, Gate-8 は未着手
+- ready_for_next_phase:
+  - yes

@@ -1,0 +1,154 @@
+﻿[PHASE RESUME SNAPSHOT]
+- current_workspace: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- current_gate_status: Gate-0 PASS / Gate-1 PASS / Gate-2 NOT PASSED / Gate-3 未着手（開始時点）
+- confirmed_passes: frontend lint/typecheck/test/build PASS、backend ruff/mypy/pytest PASS、health/docs到達性 PASS
+- unresolved_gaps: login→dashboard / sidebar / search→detail / refresh restore の実測証跡と e2e が不足（開始時点）
+- target_phase: Phase 2 closure and Phase 3 Core Data
+- next_action: Gate-2 未達項目を e2e と再検証で閉鎖し、そのまま Phase 3 実装検証へ進行
+
+[STEP REPORT]
+- step: Gate-2 closure and Phase 3 execution
+- goal: Gate-2 を閉じ、Phase 3 の最小可動を成立させる
+- files_created:
+  - なし（この実行では新規作成なし、既存作成済みファイルを継続利用）
+- files_changed:
+  - frontend/src/pages/LoginPage.tsx
+  - frontend/tests/e2e/phase2-gate2.spec.ts
+  - レポート/phase2_gate2_closure_and_phase3_report_2026-04-08.txt
+- latest_info_checked:
+  - @playwright/test: 1.59.1（npm ls）
+  - SQLAlchemy: 2.0.49
+  - Alembic: 1.17.1
+  - aiosqlite: 0.21.0
+- problems_status:
+  - get_errors: No errors found
+- lint:
+  - PASS（frontend: npm run lint / backend: python -m ruff check）
+- typecheck:
+  - PASS（frontend: npm run typecheck / backend: python -m mypy）
+- unit_test:
+  - PASS（frontend: npm run test = No test files found, exit 0 / backend: pytest -q 全件PASS）
+- integration_test:
+  - PASS（backend/tests/test_core_data.py = 4 passed）
+- e2e_test:
+  - PASS（frontend: npm run e2e = 3 passed）
+- browser_verification:
+  - login→dashboard: OK（Playwright TEST-1）
+  - sidebar navigation: OK（Playwright TEST-2/3）
+  - search→detail: OK（Playwright TEST-2）
+  - refresh restore: OK（Playwright TEST-2）
+  - market page: OK（Playwright TEST-3）
+  - stocks page: OK（Playwright TEST-3）
+- api_verification:
+  - GET /health: OK（200）
+  - GET /api/v1/health: OK（200）
+  - sneakers API: OK（GET /api/v1/sneakers 200）
+  - market API: OK（GET /api/v1/market?period=1d 200）
+  - stocks API: OK（GET /api/v1/stocks?period=1d 200）
+  - search API: OK（GET /api/v1/search?keyword=jordan 200）
+- gate_status:
+  - Gate-2: PASSED
+  - Gate-3: PASSED
+- unresolved_risks:
+  - FastAPI の on_event 非推奨警告が残存（機能影響なし、将来 lifespan へ移行推奨）
+  - 手動目視の詳細UI確認は最小で、主要導線確認は Playwright 証跡中心
+- next_action:
+  - Phase 4（wishlist / closet / portfolio）へ進行可能
+
+[PHASE COMPLETION SUMMARY]
+- phase: Phase 2 closure + Phase 3 Core Data
+- completed_objectives:
+  - Gate-2 未達項目（login→dashboard, sidebar, search→detail, refresh）を e2e で閉鎖
+  - browser console/network 異常検知を最小導入し、遷移中 ERR_ABORTED を除外して実運用ノイズを回避
+  - Phase 3 Core Data API（sneakers/search/market/stocks）の疎通・shape要件を確認
+  - migration 適用（alembic upgrade head）を実施
+  - backend integration test を通過
+- created_modules:
+  - 既存実装済みモジュールを継続利用（db/models/routers/schemas/alembic）
+- created_pages:
+  - 既存実装済みページを継続利用（Search/Detail/Market/Stocks）
+- created_apis:
+  - GET /api/v1/sneakers
+  - GET /api/v1/search
+  - GET /api/v1/market
+  - GET /api/v1/stocks
+- created_tests:
+  - frontend/tests/e2e/phase2-gate2.spec.ts（継続改善）
+  - backend/tests/test_core_data.py（既存を実行確認）
+- latest_info_recheck:
+  - 追加依存は対象限定で再確認済み（Playwright/SQLAlchemy/Alembic/aiosqlite）
+- problems_check:
+  - PASS（No errors found）
+- lint_check:
+  - PASS
+- typecheck_check:
+  - PASS
+- test_check:
+  - PASS（unit/integration/e2e）
+- browser_check:
+  - PASS（e2e 3 passed + URL到達オープン確認）
+- fallback_check:
+  - response shape に source / updated_at / partial / ai_available を確認済み
+- dqm_check:
+  - Phase 3 対象外 / 基盤のみ
+- scheduler_check:
+  - Phase 3 対象外
+- gate_result:
+  - Gate-2: PASSED
+  - Gate-3: PASSED
+- unresolved_items:
+  - Phase 4 対象（wishlist/closet/portfolio）の本実装は未着手
+- ready_for_next_phase:
+  - yes
+
+[FILE STRUCTURE SNAPSHOT]
+- frontend/
+  - package.json
+  - playwright.config.ts
+  - src/
+    - App.tsx
+    - pages/
+      - LoginPage.tsx
+      - SearchPage.tsx
+      - DetailPage.tsx
+      - MarketPage.tsx
+      - StocksPage.tsx
+  - tests/
+    - e2e/
+      - phase2-gate2.spec.ts
+- backend/
+  - alembic.ini
+  - alembic/
+    - env.py
+    - versions/
+  - app/
+    - api/routers/
+    - db/
+    - models/
+    - schemas/
+  - tests/
+    - test_core_data.py
+- レポート/
+  - phase2_gate2_closure_and_phase3_report_2026-04-08.txt
+
+[TEST EXECUTION LOG SUMMARY]
+- frontend lint:
+  - PASS（npm run lint）
+- frontend typecheck:
+  - PASS（npm run typecheck）
+- frontend build:
+  - PASS（npm run build）
+- frontend e2e:
+  - PASS（npm run e2e: 3 passed）
+- backend ruff:
+  - PASS（python -m ruff check backend）
+- backend mypy:
+  - PASS（python -m mypy backend）
+- backend pytest:
+  - PASS（python -m pytest -q backend/tests: 7 passed）
+- migration:
+  - PASS（python -m alembic upgrade head）
+- health endpoint:
+  - PASS（/health=200, /api/v1/health=200, /docs=200）
+- browser verification:
+  - PASS（Playwrightで login→dashboard / sidebar / search→detail / refresh / market / stocks）
