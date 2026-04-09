@@ -3,6 +3,14 @@
   "python.analysis.extraPaths": ["./backend"],
   "python.analysis.typeCheckingMode": "strict",
   "cSpell.words": [
-    "cooldown"
+    "cooldown",
+    "nosniff",
+    "starlette",
+    "tavily",
+    "typescript",
+    "uvicorn",
+    "vitejs",
+    "vitest",
+    "worktree"
   ]
 }

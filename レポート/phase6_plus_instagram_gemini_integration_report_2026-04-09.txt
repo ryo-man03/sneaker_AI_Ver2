@@ -1,14 +1,14 @@
-[PHASE RESUME SNAPSHOT]
+﻿[PHASE RESUME SNAPSHOT]
 - current_workspace: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
-- current_gate_status: Gate-0 PASS / Gate-1 PASS / Gate-2 PASS / Gate-3 PASS / Gate-4 PASS / Gate-5 PASS / Gate-6 PASS / Gate-7 NOT PASSED / Gate-8 NOT PASSED
-- confirmed_passes: Phase6 までの既存ゲートは維持
-- unresolved_gaps: Instagram trend intake / Gemini image analysis / Gemini grounding search の未統合
-- target_feature: Post-Phase6 integration
-- next_action: backend連携実装 -> frontend導線実装 -> 検証
+- current_gate_status: Gate-0 PASS / Gate-1 PASS / Gate-2 PASS / Gate-3 PASS / Gate-4 PASS / Gate-5 PASS / Gate-6 PASS / Gate-7 PASSED / Gate-8 NOT PASSED
+- confirmed_passes: Post-Phase6 integration + Phase7 Reliability/AdminOps の既存実装と再実測で PASS
+- unresolved_gaps: Gate-8 Final hardening 未完了
+- target_feature: Instagram trend intake + Gemini image analysis + Gemini search grounding
+- next_action: 追加機能の再実測証跡を更新し、Gate-8 に向けて hardening へ進む
 
 [STEP REPORT]
 - step: Backend integration implementation
-- goal: Instagram/Gemini/Grounding の最小APIを安全に追加
+- goal: Instagram/Gemini/Grounding の最小 API を安全に追加
 - files_created:
   - backend/app/integrations/gemini_client.py
   - backend/app/integrations/instagram_client.py
@@ -32,11 +32,11 @@
 - lint: PASS (python -m ruff check .)
 - typecheck: PASS (python -m mypy .)
 - unit_test: PASS (python -m pytest -q)
-- integration_test: PASS (new contract tests included)
+- integration_test: PASS (contract tests 含む)
 - browser_verification: pending
 - api_verification: pending
-- unresolved_risks: 外部API到達可否に依存するため fallback 経路を既定化
-- next_action: frontend導線追加
+- unresolved_risks: 外部 API 到達可否に依存するため fallback 経路を既定化
+- next_action: frontend 最小導線追加
 
 [STEP REPORT]
 - step: Frontend minimum UI wiring
@@ -51,47 +51,142 @@
 - typecheck: PASS (npm run typecheck)
 - unit_test: PASS (npm run test)
 - integration_test: N/A
-- browser_verification: PASS (playwright new spec + full e2e 7 passed)
+- browser_verification: PASS (Playwright new spec + full e2e)
 - api_verification: pending
-- unresolved_risks: Gemini/Instagramは失敗時 fallback source を返却
+- unresolved_risks: Gemini/Instagram は失敗時 fallback source を返却
 - next_action: API connectivity を実測
 
 [STEP REPORT]
-- step: Runtime/API verification
-- goal: health + new endpoints を実測
+- step: Runtime/API verification (2026-04-09 rerun)
+- goal: health + new endpoints の再実測
 - files_created: none
 - files_changed: none
 - lint: PASS
 - typecheck: PASS
 - unit_test: PASS
 - integration_test: PASS
-- browser_verification: PASS
+- browser_verification: PASS (frontend e2e: 8 passed)
 - api_verification:
   - GET /health => 200
   - GET /api/v1/health => 200
   - GET /docs => 200
   - POST /api/v1/image-analysis/analyze => 200
   - POST /api/v1/search-grounding/answer => 200
-  - GET /api/v1/instagram/trends => 200
+  - GET /api/v1/instagram/trends?hashtag=sneakers&limit=3 => 200
 - unresolved_risks:
-  - 外部サービス失敗時は partial=true + error_message で継続
-  - on_event deprecation warning は継続
-- next_action: Phase 7 Reliability/AdminOps へ進行
+  - 外部 API キー未設定時は fallback 応答（partial=true）
+  - FastAPI on_event deprecation warning は継続
+  - uvicorn 起動時は --app-dir の絶対パス指定が必須（誤 cwd 再発防止）
+- next_action: Gate-8 Final hardening へ進行
 
 [SECURITY NOTES]
 - secrets は backend/.env からのみ読込
-- secrets 実値のログ/レポート出力は未実施
+- secrets 実値のログ/レポート/テスト出力への露出なし
 - .env.example にはキー名のみ保持
+- 使用環境変数名:
+  - INSTAGRAM_ACCESS_TOKEN
+  - INSTAGRAM_BUSINESS_ACCOUNT_ID
+  - INSTAGRAM_API_VERSION
+  - GEMINI_API_KEY
 
 [IMPLEMENTATION SUMMARY]
 - Instagram API: hashtag trend intake endpoint 追加 (/api/v1/instagram/trends)
 - Gemini image analysis: structured extraction endpoint 追加 (/api/v1/image-analysis/analyze)
-- Gemini grounded answer: search-answer endpoint 追加 (/api/v1/search-grounding/answer)
-- 全レスポンスで data/source/updated_at/ai_available/partial/error_message(必要時) を返却
-- frontend で loading/error/empty/partial 表示を追加
+- Gemini grounded answer: search-assist endpoint 追加 (/api/v1/search-grounding/answer)
+- すべての新規外部連携 API で data/source/updated_at/ai_available/partial/error_message(失敗時) を返却
+- frontend で loading/error/empty/partial 表示を実装
 
 [VERIFICATION SUMMARY]
-- backend: ruff PASS / mypy PASS / pytest PASS (17 passed)
-- frontend: lint PASS / typecheck PASS / test PASS / build PASS
-- e2e: full suite PASS (7 passed)
-- Problems: No errors found
+- frontend:
+  - npm run lint: PASS
+  - npm run typecheck: PASS
+  - npm run test: PASS (No test files found, exit 0)
+  - npm run build: PASS
+  - npm run e2e: PASS (8 passed)
+- backend:
+  - python -m ruff check .: PASS
+  - python -m mypy .: PASS
+  - python -m pytest -q: PASS (18 passed)
+- Problems:
+  - No errors found
+
+[GATE STATUS]
+- Gate-7: PASSED
+- Gate-8: NOT PASSED
+
+[STEP REPORT]
+- step: Runtime/API verification (2026-04-09 codex rerun)
+- goal: Post-Phase6 Instagram/Gemini/Grounding の再実測を実行し、要件整合を最終確認
+- files_created:
+  - none
+- files_changed:
+  - backend/app/services/social_trends.py
+  - レポート/phase6_plus_instagram_gemini_integration_report_2026-04-09.txt
+- lint:
+  - PASS（frontend: npm run lint / backend: python -m ruff check .）
+- typecheck:
+  - PASS（frontend: npm run typecheck / backend: python -m mypy .）
+- unit_test:
+  - PASS（frontend: npm run test = No test files found, exit 0）
+- integration_test:
+  - PASS（backend: python -m pytest -q = 20 passed）
+  - PASS（backend: python -m pytest -q tests/test_instagram_trends_integration.py = 1 passed）
+- browser_verification:
+  - PASS（frontend: npm run e2e = 8 passed）
+- api_verification:
+  - GET /health => 200
+  - GET /api/v1/health => 200
+  - GET /docs => 200
+  - POST /api/v1/image-analysis/analyze => 200（shape=True）
+  - POST /api/v1/search-grounding/answer => 200（shape=True）
+  - GET /api/v1/instagram/trends?hashtag=sneakers&limit=3 => 200（shape=True, source=instagram, partial=true）
+- unresolved_risks:
+  - 外部 API キー未設定時は fallback 応答（partial=true）
+  - FastAPI on_event 非推奨警告は phase8 以前の実行文脈で残存していたが、現行ブランチは別実装状況の再確認が必要
+- next_action:
+  - Phase 8 Final hardening の最終整合（lifespan/security headers/admin hardening snapshot）を再実測して Gate-8 を確定する
+
+[STEP REPORT]
+- step: Phase 8+ hardening and post-phase maintenance implementation
+- goal: Gate-8 を確定し、以降フェーズ向け運用保守スナップショットを AdminOps に追加
+- files_created:
+  - none
+- files_changed:
+  - backend/app/core/settings.py
+  - backend/.env.example
+  - backend/app/schemas/admin_ops.py
+  - backend/app/services/admin_ops.py
+  - backend/tests/test_phase8_hardening.py
+  - frontend/src/pages/AdminPage.tsx
+  - frontend/tests/e2e/phase7-gate7.spec.ts
+  - レポート/phase6_plus_instagram_gemini_integration_report_2026-04-09.txt
+- lint:
+  - PASS（frontend: npm run lint / backend: python -m ruff check .）
+- typecheck:
+  - PASS（frontend: npm run typecheck / backend: python -m mypy .）
+- unit_test:
+  - PASS（frontend: npm run test = No test files found, exit 0）
+- integration_test:
+  - PASS（backend: python -m pytest -q = 20 passed）
+- browser_verification:
+  - PASS（frontend: npm run e2e = 8 passed）
+- api_verification:
+  - GET /health => 200
+  - GET /api/v1/health => 200
+  - GET /docs => 200
+  - POST /api/v1/image-analysis/analyze => 200（shape=True, source=gemini:gemini-2.5-flash, partial=False）
+  - POST /api/v1/search-grounding/answer => 200（shape=True, source=grounding-fallback, partial=True）
+  - GET /api/v1/instagram/trends?hashtag=sneakers&limit=3 => 200（shape=True, source=instagram, partial=True）
+  - GET /api/v1/admin-ops/reliability => 200（hardening + maintenance snapshot = true）
+- unresolved_risks:
+  - 外部APIキー未設定時は fallback 応答（partial=true）
+  - 依存更新と鍵ローテーションは運用スケジュールに基づく継続実施が必要
+- next_action:
+  - post-phase maintenance（依存監査・鍵ローテーション・監視閾値レビュー）を定期運用へ移行
+
+[GATE STATUS UPDATE]
+- Gate-8: PASSED
+- Post-Phase8 maintenance baseline: ESTABLISHED
+
+[NEXT PHASE]
+- Final release hardening maintenance（運用監視・鍵ローテーション・依存更新の定期運用）

@@ -3,6 +3,7 @@ from fastapi import APIRouter
 
 from app.api.routers import auth, health
 from app.api.routers.alerts import router as alerts_router
+from app.api.routers.admin_ops import router as admin_ops_router
 from app.api.routers.closet import router as closet_router
 from app.api.routers.image_analysis import router as image_analysis_router
 from app.api.routers.instagram import router as instagram_router
@@ -19,6 +20,7 @@ from app.api.routers.wishlist import router as wishlist_router
 api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(health.router)
 api_router.include_router(auth.router)
+api_router.include_router(admin_ops_router)
 api_router.include_router(sneakers_router)
 api_router.include_router(search_router)
 api_router.include_router(market_router)

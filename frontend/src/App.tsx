@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
 import { Topbar } from './components/Topbar'
+import { AdminPage } from './pages/AdminPage'
 import { BuyScorePage } from './pages/BuyScorePage'
 import { ClosetPage } from './pages/ClosetPage'
 import { DataOpsPage } from './pages/DataOpsPage'
@@ -18,9 +19,8 @@ import { StocksPage } from './pages/StocksPage'
 import { WishlistPage } from './pages/WishlistPage'
 import type { AppPage } from './types/navigation'
 
-const placeholderMap: Record<Exclude<AppPage, 'dashboard' | 'search' | 'detail' | 'market' | 'stocks' | 'closet' | 'wishlist' | 'portfolio' | 'notifications' | 'buyscore' | 'dataops'>, string> = {
+const placeholderMap: Record<Exclude<AppPage, 'dashboard' | 'search' | 'detail' | 'market' | 'stocks' | 'closet' | 'wishlist' | 'portfolio' | 'notifications' | 'buyscore' | 'admin' | 'dataops'>, string> = {
   profile: 'ユーザー情報 / 嗜好',
-  admin: 'システム監視 / 運用管理',
 }
 
 const appPages: AppPage[] = [
@@ -110,6 +110,7 @@ function App() {
           <Route path="/stocks" element={<StocksPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/buyscore" element={<BuyScorePage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/dataops" element={<DataOpsPage />} />
           {Object.entries(placeholderMap).map(([page, subtitle]) => (
             <Route

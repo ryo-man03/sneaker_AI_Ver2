@@ -25,7 +25,7 @@
 - lint:
   - PASS（frontend: npm run lint / backend: python -m ruff check）
 - typecheck:
-  - PASS（frontend: npm run typecheck / backend: python -m mypy）
+  - PASS（frontend: npm run typecheck / backeAnd: python -m mypy）
 - unit_test:
   - PASS（frontend: npm run test = No test files found, exit 0 / backend: pytest -q 全件PASS）
 - integration_test:

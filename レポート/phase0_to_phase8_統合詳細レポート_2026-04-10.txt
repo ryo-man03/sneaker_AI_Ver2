@@ -1,0 +1,558 @@
+[SOLE_MATRIX 全フェーズ統合詳細レポート]
+- 作成日: 2026-04-10
+- 対象ワークスペース: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- 作成目的: 既存の全レポートを統合し、構造/関数/技術/検証証跡/Gate判定を一元化する
+
+[SOURCE REPORTS]
+- SOLE_MATRIX_フェーズ1報告_20260408.txt
+- phase2_report_2026-04-08_full.txt
+- phase2_gate2_closure_and_phase3_report_2026-04-08.txt
+- phase2_phase3_総合実施レポート_2026-04-08.txt
+- phase4_総合実施レポート_2026-04-08.txt
+- phase3_to_phase8_continuation_report_2026-04-08.txt
+- phase6_report_2026-04-09.txt
+- phase6_plus_instagram_gemini_integration_report_2026-04-09.txt
+- phase8_final_hardening_report_2026-04-09.txt
+
+[EXECUTIVE SUMMARY]
+- Phase 0-1: 新規ワークスペース再構築と最小認証/ヘルス基盤を確立
+- Phase 2: UI導線基盤を整備。初回は Gate-2 NOT PASSED だったが、e2e導入で閉鎖
+- Phase 3: Core Data (sneakers/search/market/stocks) + DB/Alembic + integration test を成立
+- Phase 4: User Assets (wishlist/closet/portfolio/price-alert) を API/UI/e2e で成立
+- Phase 5: AI/Intelligence (buyscore/culture-vector/intake/correlation/fallback) を成立
+- Phase 6: Scheduler/Alerts Delivery (dedupe/cooldown/history/notification center) を成立
+- Phase 6+: Instagram/Gemini/Grounding 連携を最小安全実装で追加
+- Phase 7: Reliability/AdminOps を成立（レポート上、phase6+時点で Gate-7 PASSED）
+- Phase 8: lifespan移行 + trusted hosts + security headers + hardening snapshot で最終ハードニング完了
+- 最終結果: Gate-0 から Gate-8 まで全て PASSED
+
+[GATE TIMELINE]
+- Gate-0: PASS (Phase 1)
+- Gate-1: PASS (Phase 1)
+- Gate-2: 初回 NOT PASSED -> e2e再検証後 PASSED
+- Gate-3: PASSED (Core Data)
+- Gate-4: PASSED (User Assets)
+- Gate-5: PASSED (AI/Intelligence)
+- Gate-6: PASSED (Scheduler/Alerts)
+- Gate-7: PASSED (Reliability/AdminOps)
+- Gate-8: PASSED (Final Hardening)
+
+[PHASE-BY-PHASE DETAILS]
+1) Phase 0 / 1 (Scaffold)
+- frontend: Vite + React + TypeScript 初期化
+- backend: FastAPI 最小構成
+- API:
+  - GET /api/v1/health
+  - POST /api/v1/auth/login
+- テスト:
+  - backend/tests/test_health.py
+  - backend/tests/test_auth.py
+- 主要課題対応:
+  - ログイン導線不具合（バリデーション過多）を修正
+
+2) Phase 2 (Core UI)
+- Login / Dashboard / Search / Detail を主導線として整備
+- 初回判定では手動導線と自動e2e不足で Gate-2 NOT PASSED
+- 追加実施:
+  - Playwright e2e 導入と最小シナリオ実装
+  - login -> dashboard
+  - sidebar navigation
+  - search -> detail
+  - refresh restore
+  - console/pageerror/requestfailed の最小監視
+- 結果: Gate-2 PASSED
+
+3) Phase 3 (Core Data)
+- DB基盤:
+  - SQLAlchemy async + SQLite WAL + busy_timeout
+  - Alembic migration 基盤
+- API:
+  - GET /api/v1/sneakers
+  - GET /api/v1/search
+  - GET /api/v1/market
+  - GET /api/v1/stocks
+- response shape 方針:
+  - source
+  - updated_at
+  - partial
+  - ai_available
+- 結果: Gate-3 PASSED
+
+4) Phase 4 (User Asset Features)
+- API:
+  - wishlist: GET/POST/DELETE
+  - closet: GET/POST/PATCH/DELETE
+  - portfolio: GET
+  - price-alerts: GET/POST/PATCH/DELETE
+- 追加モデル:
+  - WishlistItem, ClosetItem, PriceAlertRule
+- Frontend:
+  - WishlistPage / ClosetPage / PortfolioPage
+  - src/services/api.ts / src/types/assets.ts
+- 結果: Gate-4 PASSED
+
+5) Phase 5 (AI / Intelligence)
+- API:
+  - GET /api/v1/intelligence/buyscore/{sku}
+  - GET /api/v1/intelligence/culture-vector/{sku}
+  - GET /api/v1/intelligence/correlation
+  - POST /api/v1/intelligence/intake
+- 特徴:
+  - fallback 実装（AI unavailable時に partial/fallback_reason）
+- Frontend:
+  - BuyScorePage / DataOpsPage
+- 結果: Gate-5 PASSED
+
+6) Phase 6 (Alerts / Scheduler)
+- 機能:
+  - APScheduler interval job
+  - dedupe key による重複防止
+  - cooldown 判定
+  - notification history 永続化
+  - notification center UI
+- API:
+  - GET /api/v1/notifications
+  - POST /api/v1/notifications/run
+  - GET /api/v1/notifications/scheduler
+- Frontend:
+  - NotificationsPage
+- 結果: Gate-6 PASSED
+
+7) Phase 6+ Integration (Instagram / Gemini / Grounding)
+- 新規外部連携 API:
+  - GET /api/v1/instagram/trends
+  - POST /api/v1/image-analysis/analyze
+  - POST /api/v1/search-grounding/answer
+- 失敗時方針:
+  - partial=true かつ fallback source を返却
+- 秘匿情報方針:
+  - secrets は backend/.env 読取のみ
+  - レポート/ログ/テストに実値を出さない
+
+8) Phase 7 (Reliability / AdminOps)
+- レポート上の到達:
+  - Gate-7 PASSED
+- 運用可視化:
+  - AdminOps 系の信頼性スナップショット
+
+9) Phase 8 (Final Hardening)
+- on_event -> lifespan へ移行
+- TrustedHostMiddleware 導入
+- Security headers middleware 導入:
+  - X-Content-Type-Options: nosniff
+  - X-Frame-Options: DENY
+  - Referrer-Policy: no-referrer
+  - Cache-Control: no-store
+- AdminOps hardening snapshot 追加:
+  - lifespan_mode
+  - security_headers_enabled
+  - trusted_hosts
+- 回帰防止テスト:
+  - test_health_has_security_headers
+  - test_admin_ops_contains_hardening_snapshot
+- 結果: Gate-8 PASSED
+
+[TECH STACK]
+- Frontend
+  - React 19.2.4
+  - React Router DOM 7.14.0
+  - Vite 8.x
+  - TypeScript 6.x
+  - ESLint 9.x
+  - Vitest 4.x
+  - Playwright 1.59.1
+- Backend
+  - Python 3.11
+  - FastAPI 0.135.3
+  - Uvicorn 0.37.0
+  - Pydantic 2.12.5
+  - pydantic-settings 2.11.0
+  - PyJWT 2.10.1
+  - SQLAlchemy 2.0.49
+  - aiosqlite 0.21.0
+  - Alembic 1.17.1
+  - APScheduler 3.11.2
+- Tests / QA
+  - pytest 8.4.2
+  - mypy 1.18.2
+  - ruff 0.13.2
+
+[BACKEND STRUCTURE SNAPSHOT]
+- backend/app
+  - api
+    - router.py
+    - routers/
+      - auth.py
+      - health.py
+      - sneakers.py
+      - search.py
+      - market.py
+      - stocks.py
+      - wishlist.py
+      - closet.py
+      - portfolio.py
+      - alerts.py
+      - intelligence.py
+      - notifications.py
+      - image_analysis.py
+      - search_grounding.py
+      - instagram.py
+      - admin_ops.py
+  - core
+    - settings.py
+  - db
+    - base.py
+    - session.py
+  - models
+    - sneaker.py
+    - market.py
+    - stock.py
+    - wishlist.py
+    - closet.py
+    - price_alert.py
+    - notification_event.py
+  - schemas
+    - auth.py
+    - health.py
+    - core_data.py
+    - user_assets.py
+    - intelligence.py
+    - alerts_delivery.py
+    - image_analysis.py
+    - search_grounding.py
+    - instagram.py
+    - admin_ops.py
+  - services
+    - intelligence.py
+    - alert_scheduler.py
+    - image_analysis.py
+    - search_grounding.py
+    - social_trends.py
+    - admin_ops.py
+  - integrations
+    - gemini_client.py
+    - instagram_client.py
+- backend/alembic/versions
+  - 20260408_0001_core_data.py
+  - 20260408_0002_user_assets.py
+  - 20260409_0003_notifications.py
+- backend/tests
+  - test_health.py
+  - test_auth.py
+  - test_core_data.py
+  - test_user_assets.py
+  - test_intelligence.py
+  - test_alert_scheduler.py
+  - test_image_analysis_integration.py
+  - test_search_grounding_integration.py
+  - test_instagram_trends_integration.py
+  - test_settings_env_loading.py
+  - test_admin_ops.py
+  - test_phase8_hardening.py
+
+[FRONTEND STRUCTURE SNAPSHOT]
+- frontend/src
+  - App.tsx
+  - main.tsx
+  - theme.css
+  - components
+    - Sidebar.tsx
+    - Topbar.tsx
+    - CultureRadarChart.tsx
+  - data
+    - nav.ts
+    - sneakers.ts
+  - pages
+    - LoginPage.tsx
+    - DashboardPage.tsx
+    - SearchPage.tsx
+    - DetailPage.tsx
+    - MarketPage.tsx
+    - StocksPage.tsx
+    - WishlistPage.tsx
+    - ClosetPage.tsx
+    - PortfolioPage.tsx
+    - BuyScorePage.tsx
+    - DataOpsPage.tsx
+    - NotificationsPage.tsx
+    - AdminPage.tsx
+    - PlaceholderPage.tsx
+  - services
+    - api.ts
+  - types
+    - navigation.ts
+    - assets.ts
+    - intelligence.ts
+    - notifications.ts
+- frontend/tests/e2e
+  - phase2-gate2.spec.ts
+  - phase4-gate4.spec.ts
+  - phase5-gate5.spec.ts
+  - phase6-gate6.spec.ts
+  - phase6-plus-instagram-gemini.spec.ts
+  - phase7-gate7.spec.ts
+
+[DATA MODELS]
+- Sneaker
+  - sku, model, brand, retail_price, market_price, buy_score, liquidity, note
+- MarketSnapshot
+  - sku, period, ask_price, bid_price, last_sale, liquidity, updated_at
+- StockSnapshot
+  - ticker, company, period, price, change_pct, index_name, index_change_pct, updated_at
+- WishlistItem
+  - sku, model, brand, target_price, current_price, note, created_at
+- ClosetItem
+  - sku, model, brand, quantity, avg_buy_price, current_price, acquired_at
+- PriceAlertRule
+  - sku, rule_type, threshold, active, cooldown_minutes, last_triggered_at, created_at
+- NotificationEvent
+  - rule_id, sku, rule_type, threshold, trigger_price, dedupe_key, channel, status, message, created_at
+
+[API CATALOG]
+- Base health/auth
+  - GET /health
+  - GET /api/v1/health
+  - POST /api/v1/auth/login
+- Core data
+  - GET /api/v1/sneakers
+  - GET /api/v1/sneakers/{sku}
+  - GET /api/v1/search
+  - GET /api/v1/market
+  - GET /api/v1/stocks
+- User assets
+  - GET/POST/DELETE /api/v1/wishlist
+  - GET/POST/PATCH/DELETE /api/v1/closet
+  - GET /api/v1/portfolio
+  - GET/POST/PATCH/DELETE /api/v1/price-alerts
+- Intelligence
+  - GET /api/v1/intelligence/buyscore/{sku}
+  - GET /api/v1/intelligence/culture-vector/{sku}
+  - GET /api/v1/intelligence/correlation
+  - POST /api/v1/intelligence/intake
+- Notifications/Scheduler
+  - GET /api/v1/notifications
+  - POST /api/v1/notifications/run
+  - GET /api/v1/notifications/scheduler
+- External integrations
+  - POST /api/v1/image-analysis/analyze
+  - POST /api/v1/search-grounding/answer
+  - GET /api/v1/instagram/trends
+- AdminOps/Reliability
+  - GET /api/v1/admin-ops/reliability
+
+[FUNCTION CATALOG: BACKEND ROUTERS]
+- admin_ops.py
+  - get_admin_ops_reliability
+- alerts.py
+  - list_price_alert_rules
+  - create_price_alert_rule
+  - update_price_alert_rule
+  - delete_price_alert_rule
+- auth.py
+  - _create_access_token
+  - login
+- closet.py
+  - list_closet
+  - create_closet_item
+  - update_closet_item
+  - delete_closet_item
+- health.py
+  - get_health
+- image_analysis.py
+  - post_image_analysis
+- instagram.py
+  - get_instagram_trends
+- intelligence.py
+  - _build_meta
+  - get_buy_score
+  - get_culture_vector
+  - get_stock_correlation
+  - post_intake
+- market.py
+  - get_market
+- notifications.py
+  - list_notifications
+  - run_notification_dispatch
+  - get_scheduler_status
+- portfolio.py
+  - get_portfolio
+- search.py
+  - _rank_value
+  - search_sneakers
+- search_grounding.py
+  - post_grounded_answer
+- sneakers.py
+  - list_sneakers
+  - get_sneaker_detail
+- stocks.py
+  - get_stocks
+- wishlist.py
+  - list_wishlist
+  - create_wishlist_item
+  - delete_wishlist_item
+
+[FUNCTION CATALOG: BACKEND CORE/SERVICES]
+- db/session.py
+  - get_session
+  - init_db_and_seed
+  - ensure_db_ready
+  - _seed_core_data
+  - _seed_asset_data_if_empty
+- services/admin_ops.py
+  - collect_admin_ops
+  - _load_counts
+  - _count_rows
+  - _build_dqm
+  - _freshness_check
+  - _as_utc_or_none
+- services/alert_scheduler.py
+  - evaluate_alert_rules
+  - run_dispatch_cycle
+  - scheduler_job
+  - start_alert_scheduler
+  - stop_alert_scheduler
+  - scheduler_running
+  - scheduler_interval_seconds
+  - _match_condition
+  - _is_cooldown
+  - _build_dedupe_key
+  - _as_utc
+- services/image_analysis.py
+  - analyze_image
+  - _build_fallback_data
+  - _parse_gemini_json
+- services/intelligence.py
+  - ai_available
+  - build_culture_vector
+  - calculate_buy_score
+  - build_stock_correlation
+  - parse_intake_payload
+  - _stock_component
+  - _parse_csv
+  - _parse_url
+  - _parse_image
+- services/search_grounding.py
+  - generate_grounded_answer
+  - _extract_citations
+  - _fallback_answer
+- services/social_trends.py
+  - fetch_instagram_trends
+  - _normalize_item
+  - _fallback_data
+- integrations/instagram_client.py
+  - _parse_datetime
+- main.py
+  - lifespan
+  - apply_security_headers
+  - health_root
+
+[FUNCTION CATALOG: BACKEND TESTS]
+- test_admin_ops_reliability_contract
+- test_scheduler_status_and_notification_dedupe_flow
+- test_login_success
+- test_login_failure
+- test_sneakers_endpoint
+- test_search_endpoint
+- test_market_endpoint
+- test_stocks_endpoint
+- test_health_endpoint
+- test_image_analysis_endpoint_contract
+- test_instagram_trends_endpoint_contract
+- test_buyscore_endpoint
+- test_correlation_endpoint
+- test_intake_csv_and_url
+- test_health_has_security_headers
+- test_admin_ops_contains_hardening_snapshot
+- test_search_grounding_endpoint_contract
+- test_settings_reads_env_values
+- test_wishlist_crud_and_price_alert_rule
+- test_closet_crud_and_portfolio_summary
+
+[FUNCTION CATALOG: FRONTEND]
+- components
+  - CultureRadarChart
+  - Sidebar
+  - Topbar
+- pages
+  - AdminPage
+  - BuyScorePage
+  - ClosetPage
+  - DashboardPage
+  - DataOpsPage
+  - DetailPage
+  - LoginPage
+  - MarketPage
+  - NotificationsPage
+  - PlaceholderPage
+  - PortfolioPage
+  - SearchPage
+  - StocksPage
+  - WishlistPage
+- app
+  - pageFromPathname
+  - App
+- data
+  - formatYen
+- e2e helper
+  - attachClientErrorMonitor
+  - assertNoClientErrors
+
+[TEST EXECUTION LOG SUMMARY (REPORT INTEGRATION)]
+- frontend lint: PASS（各フェーズ再実行）
+- frontend typecheck: PASS（各フェーズ再実行）
+- frontend build: PASS（各フェーズ再実行）
+- frontend e2e:
+  - phase2時点: 3 passed
+  - phase4時点: 4 passed
+  - phase5時点: 5 passed
+  - phase6時点: 6 passed
+  - phase6+時点: 8 passed
+  - phase8時点: 8 passed 維持
+- backend ruff: PASS
+- backend mypy: PASS
+- backend pytest:
+  - phase1: 3 passed
+  - phase3: 7 passed
+  - phase4: 9 passed
+  - phase5: 12 passed
+  - phase6: 13 passed
+  - phase6+再実測: 18 -> 20 passed
+  - phase8: 20 passed
+- migration:
+  - alembic upgrade head: PASS
+- health endpoint:
+  - /health, /api/v1/health, /docs: PASS
+- external integration API:
+  - /api/v1/image-analysis/analyze: 200
+  - /api/v1/search-grounding/answer: 200
+  - /api/v1/instagram/trends: 200
+
+[KNOWN RISKS / OPERATIONS]
+- 外部APIキー未設定時は fallback 応答（partial=true）
+- DB freshness はデータ投入タイミング依存
+- 依存更新/鍵ローテーション/監視閾値レビューの定期運用が必要
+- 実行環境では uvicorn の --app-dir を明示すると起動安定
+- SQLite運用では wal/shm ファイル差分が出るため、レビュー時は実装差分と分離推奨
+
+[CURRENT WORKTREE SNAPSHOT]
+- 多数の追加・更新ファイルが未コミット（実装済み成果を含む）
+- 管理対象には backend/app, backend/alembic, frontend/src, frontend/tests/e2e, レポート群が含まれる
+- phase8関連の admin_ops/admin hardening 変更は未追跡ファイルを含む
+
+[FINAL STATUS]
+- Gate-2: PASSED
+- Gate-3: PASSED
+- Gate-4: PASSED
+- Gate-5: PASSED
+- Gate-6: PASSED
+- Gate-7: PASSED
+- Gate-8: PASSED
+- ready_for_next_phase: yes
+- 次フェーズ: Final release hardening maintenance（運用定常化）
+
+[APPENDIX: 参照した追加スナップショットファイル]
+- レポート/tmp/symbols_snapshot.txt
+- レポート/tmp/git_status_short.txt
+- レポート/tmp/files_snapshot.txt
+- レポート/tmp/files_clean_snapshot.txt
+- レポート/tmp/tree_clean_full.txt

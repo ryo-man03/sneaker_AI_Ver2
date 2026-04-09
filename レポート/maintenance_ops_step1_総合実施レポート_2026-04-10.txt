@@ -1,0 +1,247 @@
+[SOLE//MATRIX 保守運用 Step-1 総合実施レポート]
+- 作成日: 2026-04-10
+- 対象ワークスペース: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- 対象リポジトリ: https://github.com/ryo-man03/sneaker_AI_Ver2.git
+- レポート種別: 保守運用フェーズ Step-1 baseline 実測 + 実施内容統合
+
+==================================================
+1) MAINTENANCE RESUME SNAPSHOT
+==================================================
+- workspace: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- current_gate_status: Gate-8 PASSED 前提
+- maintenance_target: Gate-8 PASSED 状態を維持したまま baseline 健全性を再確認
+- current_branch: main
+- git_status_summary: git status --short のエントリ数 113（dirty worktree）
+- intended_change_scope: 非破壊検証（実行・確認のみ、コード修正なし）
+- baseline_needed_checks:
+  - frontend lint / typecheck / test / build
+  - frontend e2e (Playwright)
+  - backend ruff / mypy / pytest / alembic
+  - runtime health / api health / docs
+  - major routes reachability
+- external_dependency_mode: 依存更新は未実施（Step-1では判断・更新とも未着手）
+- known_risks:
+  - 外部APIキー未設定時は partial/fallback 応答
+  - SQLite WAL 運用で .db-wal/.db-shm 差分が出る
+  - 依存更新は回帰リスクを伴うため baseline green 後に判断
+- rollback_policy: 変更前 baseline を固定し、回帰が出た場合は最小差分で即復旧
+- self_check_status: セルフチェック実施済み（10項目以上の内部確認）
+
+==================================================
+2) STEP-1 Baseline 健全性確認（実測）
+==================================================
+[Frontend]
+- npm run lint: PASS
+- npm run typecheck: PASS
+- npm run test: PASS（No test files found, exit code 0）
+- npm run build: PASS
+- npx playwright test: PASS（8 passed）
+
+[Backend]
+- python -m ruff check .: PASS
+- python -m mypy app: PASS
+- python -m pytest -q: PASS（20 passed）
+- python -m alembic upgrade head: PASS
+
+[Runtime API checks]
+- GET http://127.0.0.1:8000/health: 200
+- GET http://127.0.0.1:8000/api/v1/health: 200
+- GET http://127.0.0.1:8000/docs: 200
+
+[Frontend route reachability checks]
+- GET http://127.0.0.1:5173/: 200
+- GET http://127.0.0.1:5173/login: 200
+- GET http://127.0.0.1:5173/search: 200
+- GET http://127.0.0.1:5173/detail: 200
+- GET http://127.0.0.1:5173/market: 200
+- GET http://127.0.0.1:5173/stocks: 200
+- GET http://127.0.0.1:5173/notifications: 200
+- GET http://127.0.0.1:5173/admin: 200
+- GET http://127.0.0.1:5173/dataops: 200
+
+[Browser flow evidence]
+- login -> dashboard: PASS（Playwright e2e）
+- search -> detail: PASS（Playwright e2e）
+- refresh restore: PASS（Playwright e2e）
+- market / stocks / notifications / admin / dataops: PASS（Playwright e2e + route到達）
+- console error が致命的でないこと: 未確認（本実行ではブラウザコンソール直接取得不可）
+- network failure が継続的でないこと: 未確認（同上）
+
+[Problems]
+- VS Code Problems: PASS（No errors found）
+
+==================================================
+3) その他今回行ったこと
+==================================================
+- 作業前スナップショット取得
+  - git branch --show-current
+  - git status --short
+- Python 環境を設定し、固定実行パスで backend 検証を統一
+- backend サーバー起動確認
+  - uvicorn app.main:app --app-dir c:/Users/liang/スニーカーさん/sole_matrix_phase1_new/backend --host 127.0.0.1 --port 8000
+- frontend 開発サーバー起動確認
+  - npm run dev -- --host 127.0.0.1 --port 5173
+- ブラウザページオープンによる主要ルート到達確認
+  - /login, /search, /detail, /market, /stocks, /notifications, /admin, /dataops
+- 検証後、起動した background terminals を停止して作業状態をクリーン化
+- コード変更: なし
+
+==================================================
+4) ファイル構造スナップショット（主要）
+==================================================
+[backend/app]
+- backend/app/api/router.py
+- backend/app/api/routers/
+  - admin_ops.py
+  - alerts.py
+  - auth.py
+  - closet.py
+  - health.py
+  - image_analysis.py
+  - instagram.py
+  - intelligence.py
+  - market.py
+  - notifications.py
+  - portfolio.py
+  - search.py
+  - search_grounding.py
+  - sneakers.py
+  - stocks.py
+  - wishlist.py
+- backend/app/core/settings.py
+- backend/app/db/
+  - base.py
+  - session.py
+- backend/app/integrations/
+  - gemini_client.py
+  - instagram_client.py
+- backend/app/models/
+  - sneaker.py
+  - market.py
+  - stock.py
+  - wishlist.py
+  - closet.py
+  - price_alert.py
+  - notification_event.py
+- backend/app/schemas/
+  - auth.py
+  - health.py
+  - core_data.py
+  - user_assets.py
+  - intelligence.py
+  - alerts_delivery.py
+  - image_analysis.py
+  - search_grounding.py
+  - instagram.py
+  - admin_ops.py
+- backend/app/services/
+  - intelligence.py
+  - alert_scheduler.py
+  - image_analysis.py
+  - search_grounding.py
+  - social_trends.py
+  - admin_ops.py
+- backend/app/main.py
+
+[backend/tests]
+- test_health.py
+- test_auth.py
+- test_core_data.py
+- test_user_assets.py
+- test_intelligence.py
+- test_alert_scheduler.py
+- test_image_analysis_integration.py
+- test_search_grounding_integration.py
+- test_instagram_trends_integration.py
+- test_settings_env_loading.py
+- test_admin_ops.py
+- test_phase8_hardening.py
+
+[frontend/src]
+- App.tsx
+- main.tsx
+- components/
+  - Sidebar.tsx
+  - Topbar.tsx
+  - CultureRadarChart.tsx
+- data/
+  - nav.ts
+  - sneakers.ts
+- pages/
+  - LoginPage.tsx
+  - DashboardPage.tsx
+  - SearchPage.tsx
+  - DetailPage.tsx
+  - MarketPage.tsx
+  - StocksPage.tsx
+  - WishlistPage.tsx
+  - ClosetPage.tsx
+  - PortfolioPage.tsx
+  - BuyScorePage.tsx
+  - DataOpsPage.tsx
+  - NotificationsPage.tsx
+  - AdminPage.tsx
+  - PlaceholderPage.tsx
+- services/api.ts
+- types/
+  - navigation.ts
+  - assets.ts
+  - intelligence.ts
+  - notifications.ts
+- theme.css
+
+[frontend/tests/e2e]
+- phase2-gate2.spec.ts
+- phase4-gate4.spec.ts
+- phase5-gate5.spec.ts
+- phase6-gate6.spec.ts
+- phase6-plus-instagram-gemini.spec.ts
+- phase7-gate7.spec.ts
+
+==================================================
+5) テスト実行結果（今回実測）
+==================================================
+[Frontend quality]
+- lint: PASS
+- typecheck: PASS
+- test: PASS（No test files found）
+- build: PASS
+
+[Frontend e2e]
+- npx playwright test: PASS（8 passed）
+
+[Backend quality]
+- ruff: PASS
+- mypy: PASS
+- pytest: PASS（20 passed）
+- alembic upgrade head: PASS
+
+[Runtime]
+- /health: PASS（200）
+- /api/v1/health: PASS（200）
+- /docs: PASS（200）
+- major routes reachability: PASS（9 routes all 200）
+
+[Problems]
+- No errors found: PASS
+
+==================================================
+6) 判定
+==================================================
+- Step-1 baseline 総合判定: PASSED
+- Gate-8 preservation status: 維持（劣化なし）
+- new problems status: 追加なし
+- unresolved items:
+  - console/pageerror/requestfailed の詳細監視は今回未確認（e2e成功を代替証跡として採用）
+  - 依存更新可否判断（Step-2）は未実施
+
+==================================================
+7) 次アクション（保守運用フロー継続）
+==================================================
+1) Step-2: 依存関係監査（更新可否判断のみ、無理な更新は見送り）
+2) Step-3: Scheduler/Alerts/partial/fallback/AdminOps の運用点検
+3) Step-4: 外部連携（Gemini/Instagram/Search Grounding）の live/fallback 安全確認
+4) Step-5以降: 必要最小限の修正と全回帰検証
+
+[保存先]
+c:\Users\liang\スニーカーさん\sole_matrix_phase1_new\レポート\maintenance_ops_step1_総合実施レポート_2026-04-10.txt

@@ -1,0 +1,68 @@
+[PHASE RESUME SNAPSHOT]
+- current_workspace: c:\Users\liang\スニーカーさん\sole_matrix_phase1_new
+- current_gate_status: Gate-0 PASS / Gate-1 PASS / Gate-2 PASS / Gate-3 PASS / Gate-4 PASS / Gate-5 PASS / Gate-6 PASS / Gate-7 PASS / Gate-8 NOT PASSED (start)
+- confirmed_passes: phase2-7 既存e2e/pytest系は直近実測PASS
+- unresolved_gaps: Gate-8 Final hardening 未実装（on_event非推奨警告、運用保護ヘッダー、hardening可視化不足）
+- target_feature: Phase 8 Final hardening
+- next_action: lifespan移行 + security hardening + 管理画面可視化 + 再実測
+
+[STEP REPORT]
+- step: Backend hardening implementation
+- goal: startup/shutdown を lifespan 化し、運用防御ヘッダーと host 制御を追加
+- files_created:
+  - backend/tests/test_phase8_hardening.py
+- files_changed:
+  - backend/app/main.py
+  - backend/app/core/settings.py
+  - backend/.env.example
+  - backend/app/schemas/admin_ops.py
+  - backend/app/services/admin_ops.py
+  - frontend/src/pages/AdminPage.tsx
+- lint:
+  - backend: PASS (python -m ruff check .)
+  - frontend: PASS (npm run lint)
+- typecheck:
+  - backend: PASS (python -m mypy .)
+  - frontend: PASS (npm run typecheck)
+- unit_test:
+  - backend: PASS (python -m pytest -q, 20 passed)
+  - frontend: PASS (npm run test, No test files found / exit 0)
+- integration_test:
+  - PASS (既存 integration + phase8 hardening test)
+- browser_verification:
+  - PASS (npm run e2e, 8 passed)
+- api_verification:
+  - GET /health => 200
+  - GET /api/v1/health => 200
+  - GET /docs => 200
+  - GET /api/v1/admin-ops/reliability => 200
+  - /health response headers: X-Content-Type-Options=nosniff, X-Frame-Options=DENY, Referrer-Policy=no-referrer
+- unresolved_risks:
+  - 外部APIキー未設定時は fallback 応答（partial=true）
+  - DB freshness はデータ投入タイミング依存
+- next_action:
+  - Gate-8 判定と最終統合サマリー更新
+
+[IMPLEMENTATION SUMMARY]
+- FastAPI on_event を lifespan へ移行して deprecation リスクを解消
+- TrustedHostMiddleware と環境変数ベース trusted hosts を導入
+- Security headers middleware を導入（nosniff/deny/referrer-policy/no-store）
+- AdminOps API に hardening snapshot を追加
+  - lifespan_mode
+  - security_headers_enabled
+  - trusted_hosts
+- AdminPage に Hardening セクションを追加（旧レスポンス互換あり）
+- 回帰防止テストを追加
+  - test_health_has_security_headers
+  - test_admin_ops_contains_hardening_snapshot
+
+[SECRETS SAFETY]
+- APIキー/トークンの実値出力は未実施
+- 設定は backend/.env からのみ読取
+- backend/.env.example はキー名のみ維持
+
+[GATE STATUS]
+- Gate-8: PASSED
+
+[NEXT PHASE]
+- Final release hardening maintenance (運用監視・鍵ローテーション・依存更新の定期運用)

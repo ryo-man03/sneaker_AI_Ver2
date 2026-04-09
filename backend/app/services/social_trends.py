@@ -23,7 +23,7 @@ async def fetch_instagram_trends(*, hashtag: str, limit: int) -> TrendFetchResul
     if not client.available():
         return TrendFetchResult(
             data=_fallback_data(hashtag=hashtag),
-            source="instagram-fallback",
+            source="instagram",
             ai_available=False,
             partial=True,
             error_message="Instagram credentials are not configured",
@@ -46,7 +46,7 @@ async def fetch_instagram_trends(*, hashtag: str, limit: int) -> TrendFetchResul
     except RuntimeError as exc:
         return TrendFetchResult(
             data=_fallback_data(hashtag=hashtag),
-            source="instagram-fallback",
+            source="instagram",
             ai_available=True,
             partial=True,
             error_message=str(exc),

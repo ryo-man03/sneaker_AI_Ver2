@@ -1,0 +1,137 @@
+﻿===BACKEND PY SYMBOLS===
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\admin_ops.py:14: async def get_admin_ops_reliability(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\alerts.py:22: async def list_price_alert_rules(session: AsyncSession = Depends(get_session)) -> PriceAlertRuleListResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\alerts.py:37: async def create_price_alert_rule(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\alerts.py:49: async def update_price_alert_rule(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\alerts.py:67: async def delete_price_alert_rule(rule_id: int, session: AsyncSession = Depends(get_session)) -> Response:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\auth.py:15: def _create_access_token(subject: str) -> str:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\auth.py:29: def login(payload: LoginRequest) -> LoginResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\closet.py:17: async def list_closet(session: AsyncSession = Depends(get_session)) -> ClosetListResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\closet.py:32: async def create_closet_item(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\closet.py:44: async def update_closet_item(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\closet.py:62: async def delete_closet_item(item_id: int, session: AsyncSession = Depends(get_session)) -> Response:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\health.py:11: def get_health() -> HealthResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\image_analysis.py:13: async def post_image_analysis(request: ImageAnalysisRequest) -> ImageAnalysisResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\instagram.py:13: async def get_instagram_trends(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\intelligence.py:35: def _build_meta(source: str, partial: bool, ai_enabled: bool) -> DataMeta:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\intelligence.py:45: async def get_buy_score(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\intelligence.py:84: async def get_culture_vector(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\intelligence.py:107: async def get_stock_correlation(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\intelligence.py:130: async def post_intake(request: IntakeRequest) -> IntakeResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\market.py:16: async def get_market(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\notifications.py:28: async def list_notifications(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\notifications.py:50: async def run_notification_dispatch(session: AsyncSession = Depends(get_session)) -> AlertDispatchResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\notifications.py:71: async def get_scheduler_status() -> SchedulerStatusResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\portfolio.py:17: async def get_portfolio(session: AsyncSession = Depends(get_session)) -> PortfolioResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\search.py:15: def _rank_value(query: str, sku: str, model: str, brand: str, note: str) -> float:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\search.py:30: async def search_sneakers(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\search_grounding.py:16: async def post_grounded_answer(request: SearchGroundingRequest) -> SearchGroundingResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\sneakers.py:17: async def list_sneakers(session: AsyncSession = Depends(get_session)) -> SneakerListResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\sneakers.py:33: async def get_sneaker_detail(sku: str, session: AsyncSession = Depends(get_session)) -> SneakerDetailResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\stocks.py:16: async def get_stocks(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\wishlist.py:17: async def list_wishlist(session: AsyncSession = Depends(get_session)) -> WishlistListResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\wishlist.py:32: async def create_wishlist_item(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\api\routers\wishlist.py:44: async def delete_wishlist_item(item_id: int, session: AsyncSession = Depends(get_session)) -> Response:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\db\session.py:37: async def get_session() -> AsyncIterator[AsyncSession]:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\db\session.py:43: async def init_db_and_seed() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\db\session.py:47: async def ensure_db_ready() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\db\session.py:69: def _seed_core_data(session: AsyncSession) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\db\session.py:173: async def _seed_asset_data_if_empty(session: AsyncSession) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\integrations\instagram_client.py:133: def _parse_datetime(raw: object) -> datetime:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\admin_ops.py:39: async def collect_admin_ops(session: AsyncSession) -> AdminOpsResult:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\admin_ops.py:131: async def _load_counts(session: AsyncSession) -> TableCounts:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\admin_ops.py:150: async def _count_rows(session: AsyncSession, model: type[object]) -> int:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\admin_ops.py:155: def _build_dqm(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\admin_ops.py:205: def _freshness_check(*, key: str, latest: datetime | None, now: datetime, max_age: timedelta) -> DqmCheck:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\admin_ops.py:218: def _as_utc_or_none(value: object) -> datetime | None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:36: async def evaluate_alert_rules(session: AsyncSession) -> AlertDispatchStats:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:106: async def run_dispatch_cycle() -> AlertDispatchStats:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:111: async def scheduler_job() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:115: async def start_alert_scheduler() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:138: async def stop_alert_scheduler() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:147: def scheduler_running() -> bool:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:151: def scheduler_interval_seconds() -> int:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:155: def _match_condition(rule_type: str, trigger_price: float, threshold: float) -> bool:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:161: def _is_cooldown(rule: PriceAlertRule, now: datetime) -> bool:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:169: def _build_dedupe_key(rule_id: int, trigger_price: float, updated_at: datetime) -> str:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\alert_scheduler.py:173: def _as_utc(value: datetime) -> datetime:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\image_analysis.py:21: async def analyze_image(request: ImageAnalysisRequest) -> ImageAnalysisResult:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\image_analysis.py:59: def _build_fallback_data(request: ImageAnalysisRequest) -> ImageAnalysisData:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\image_analysis.py:92: def _parse_gemini_json(text: str) -> ImageAnalysisData:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:57: def ai_available() -> bool:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:61: def build_culture_vector(sneaker: Sneaker) -> list[tuple[str, float]]:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:79: def calculate_buy_score(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:118: def build_stock_correlation(stocks: Sequence[StockSnapshot]) -> tuple[list[CorrelationPoint], str]:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:149: def parse_intake_payload(intake_type: str, payload: str) -> tuple[int, list[IntakePreview], list[str]]:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:166: def _stock_component(brand: str, stocks: Sequence[StockSnapshot]) -> int:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:185: def _parse_csv(payload: str) -> tuple[int, list[IntakePreview], list[str]]:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:214: def _parse_url(payload: str, warnings: list[str]) -> IntakePreview:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\intelligence.py:227: def _parse_image(payload: str, warnings: list[str]) -> IntakePreview:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\search_grounding.py:20: async def generate_grounded_answer(*, query: str, max_citations: int) -> SearchGroundingResult:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\search_grounding.py:56: def _extract_citations(text: str, *, max_citations: int) -> list[GroundingCitation]:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\search_grounding.py:82: def _fallback_answer(*, query: str) -> SearchGroundingData:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\social_trends.py:20: async def fetch_instagram_trends(*, hashtag: str, limit: int) -> TrendFetchResult:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\social_trends.py:56: def _normalize_item(*, hashtag: str, row: object) -> InstagramTrendItem:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\services\social_trends.py:72: def _fallback_data(*, hashtag: str) -> InstagramTrendData:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\main.py:20: async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\main.py:47: async def apply_security_headers(
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\app\main.py:65: def health_root() -> HealthResponse:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_admin_ops.py:9: def test_admin_ops_reliability_contract() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_alert_scheduler.py:15: async def _rewind_last_triggered(rule_id: int, minutes_ago: int) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_alert_scheduler.py:24: async def _insert_market_snapshot(sku: str, last_sale: float) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_alert_scheduler.py:40: def test_scheduler_status_and_notification_dedupe_flow() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_auth.py:11: def test_login_success() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_auth.py:22: def test_login_failure() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_core_data.py:10: def test_sneakers_endpoint() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_core_data.py:19: def test_search_endpoint() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_core_data.py:27: def test_market_endpoint() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_core_data.py:35: def test_stocks_endpoint() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_health.py:11: def test_health_endpoint() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_image_analysis_integration.py:11: def test_image_analysis_endpoint_contract(monkeypatch: MonkeyPatch) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_instagram_trends_integration.py:12: def test_instagram_trends_endpoint_contract(monkeypatch: MonkeyPatch) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_intelligence.py:10: def test_buyscore_endpoint() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_intelligence.py:22: def test_correlation_endpoint() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_intelligence.py:32: def test_intake_csv_and_url() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_phase8_hardening.py:9: def test_health_has_security_headers() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_phase8_hardening.py:18: def test_admin_ops_contains_hardening_snapshot() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_search_grounding_integration.py:11: def test_search_grounding_endpoint_contract(monkeypatch: MonkeyPatch) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_settings_env_loading.py:7: def test_settings_reads_env_values(monkeypatch: MonkeyPatch) -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_user_assets.py:10: def test_wishlist_crud_and_price_alert_rule() -> None:
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\backend\tests\test_user_assets.py:59: def test_closet_crud_and_portfolio_summary() -> None:
+===FRONTEND TS/TSX SYMBOLS===
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\components\CultureRadarChart.tsx:26: export function CultureRadarChart({ values }: CultureRadarChartProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\components\Sidebar.tsx:10: export function Sidebar({ activePage, onNavigate }: SidebarProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\components\Topbar.tsx:11: export function Topbar({ page, onGlobalSearch }: TopbarProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\data\nav.ts:4: export const NAV_SECTIONS: NavSection[] = [
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\data\nav.ts:46: export const PAGE_TITLES: Record<AppPage, string> = {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\data\sneakers.ts:14: export const SNEAKERS: SneakerRecord[] = [
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\data\sneakers.ts:72: export function formatYen(amount: number): string {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\AdminPage.tsx:50: export function AdminPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\BuyScorePage.tsx:10: export function BuyScorePage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\ClosetPage.tsx:26: export function ClosetPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\DashboardPage.tsx:15: export function DashboardPage({ onOpenDetail }: DashboardPageProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\DataOpsPage.tsx:28: export function DataOpsPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\DetailPage.tsx:45: export function DetailPage({ sku }: DetailPageProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\LoginPage.tsx:9: export function LoginPage({ onLogin }: LoginPageProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\MarketPage.tsx:18: export function MarketPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\NotificationsPage.tsx:7: export function NotificationsPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\PlaceholderPage.tsx:7: export function PlaceholderPage({ title, subtitle }: PlaceholderPageProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\PortfolioPage.tsx:7: export function PortfolioPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\SearchPage.tsx:47: export function SearchPage({ query, onQueryChange, onOpenDetail }: SearchPageProps) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\StocksPage.tsx:19: export function StocksPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\pages\WishlistPage.tsx:38: export function WishlistPage() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\services\api.ts:2: export const API_BASE_URL = 'http://127.0.0.1:8000/api/v1'
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\App.tsx:42: function pageFromPathname(pathname: string): AppPage {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\src\App.tsx:47: function App() {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase2-gate2.spec.ts:4: function attachClientErrorMonitor(page: Page) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase2-gate2.spec.ts:29: function assertNoClientErrors(errors: string[]) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase4-gate4.spec.ts:4: function attachClientErrorMonitor(page: Page) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase4-gate4.spec.ts:32: function assertNoClientErrors(errors: string[]) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase5-gate5.spec.ts:4: function attachClientErrorMonitor(page: Page) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase5-gate5.spec.ts:32: function assertNoClientErrors(errors: string[]) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase6-gate6.spec.ts:4: function attachClientErrorMonitor(page: Page) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase6-gate6.spec.ts:32: function assertNoClientErrors(errors: string[]) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase6-plus-instagram-gemini.spec.ts:4: function attachClientErrorMonitor(page: Page) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase6-plus-instagram-gemini.spec.ts:35: function assertNoClientErrors(errors: string[]) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase7-gate7.spec.ts:3: function attachClientErrorMonitor(page: Page) {
+C:\Users\liang\スニーカーさん\sole_matrix_phase1_new\frontend\tests\e2e\phase7-gate7.spec.ts:34: function assertNoClientErrors(errors: string[]) {
